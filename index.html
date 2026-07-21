@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PROCEL Diabetes y Obesidad v2</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,300&family=DM+Mono:wght@400;500&display=swap');
+:root{--teal:#0d9488;--teal2:#14b8a6;--teal3:#ccfbf1;--teal4:#f0fdfa;--navy:#0f3460;--navy2:#1a4a7a;--amber:#d97706;--amber2:#fef3c7;--red:#dc2626;--red2:#fee2e2;--green:#16a34a;--green2:#dcfce7;--slate:#64748b;--slate2:#f1f5f9;--slate3:#e2e8f0;--text:#0f172a;--muted:#64748b;--white:#fff;--bg:#f8fafc;--radius:14px;--radius-sm:8px;--shadow:0 2px 12px rgba(0,0,0,.07);--shadow-md:0 4px 24px rgba(0,0,0,.10);}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+code,mono{font-family:'DM Mono',monospace}
+.app{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+@media(max-width:860px){.app{grid-template-columns:1fr}}
+.sidebar{background:linear-gradient(160deg,var(--navy) 0%,#1a4a7a 60%,#0d9488 100%);color:#fff;display:flex;flex-direction:column;padding:0}
+.sb-brand{padding:24px 20px 16px;border-bottom:1px solid rgba(255,255,255,.12)}
+.sb-logo{font-size:20px;font-weight:900;letter-spacing:-.5px;color:#fff}
+.sb-logo span{color:var(--teal2)}
+.sb-sub{font-size:11px;opacity:.65;margin-top:2px;font-weight:300}
+.sb-nav{padding:16px 12px;flex:1}
+.nav-section{font-size:9px;font-weight:700;letter-spacing:.1em;opacity:.5;text-transform:uppercase;padding:12px 8px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius-sm);cursor:pointer;font-weight:500;font-size:13px;color:rgba(255,255,255,.75);transition:all .15s;margin-bottom:2px}
+.nav-item:hover{background:rgba(255,255,255,.1);color:#fff}
+.nav-item.active{background:rgba(13,148,136,.45);color:#fff;font-weight:700}
+.nav-item .ico{font-size:16px;width:22px;text-align:center}
+.sb-footer{padding:16px;border-top:1px solid rgba(255,255,255,.12);font-size:10px;opacity:.45;line-height:1.6}
+.main{background:var(--bg);overflow-y:auto}
+.topbar{background:#fff;border-bottom:1px solid var(--slate3);padding:16px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.topbar-title{font-size:18px;font-weight:700;color:var(--navy)}
+.topbar-sub{font-size:12px;color:var(--muted);margin-top:1px}
+.content{padding:24px 28px}
+.panel{display:none}.panel.active{display:block}
+.card{background:#fff;border:1px solid var(--slate3);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden}
+.card-header{padding:14px 18px;border-bottom:1px solid var(--slate3);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(90deg,var(--teal4),#fff)}
+.card-title{font-size:13px;font-weight:700;color:var(--teal);display:flex;align-items:center;gap:8px}
+.card-body{padding:18px}
+.fg{display:grid;gap:14px}
+.fg2{grid-template-columns:1fr 1fr}
+.fg3{grid-template-columns:1fr 1fr 1fr}
+.fg4{grid-template-columns:1fr 1fr 1fr 1fr}
+@media(max-width:640px){.fg2,.fg3,.fg4{grid-template-columns:1fr}}
+.field label{display:block;font-size:11px;font-weight:700;color:var(--slate);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.field input,.field select{width:100%;padding:9px 12px;border:1.5px solid var(--slate3);border-radius:var(--radius-sm);font:inherit;font-size:13px;color:var(--text);background:#fafcff;transition:border .15s}
+.field input:focus,.field select:focus{outline:none;border-color:var(--teal);background:#f0fdfa}
+.field input[readonly]{background:var(--teal4);color:var(--navy);font-weight:700;border-color:var(--teal3)}
+.btn{padding:9px 18px;border-radius:var(--radius-sm);border:none;font:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:all .15s}
+.btn-primary{background:var(--teal);color:#fff}.btn-primary:hover{background:var(--teal2)}
+.btn-amber{background:var(--amber);color:#fff}.btn-amber:hover{filter:brightness(1.1)}
+.btn-outline{background:#fff;border:1.5px solid var(--slate3);color:var(--text)}.btn-outline:hover{border-color:var(--teal);color:var(--teal)}
+.btn-sm{padding:6px 12px;font-size:12px}
+.btn-group{display:flex;gap:8px;flex-wrap:wrap}
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:16px}
+@media(max-width:860px){.kpi-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:500px){.kpi-grid{grid-template-columns:repeat(2,1fr)}}
+.kpi{background:#fff;border:1.5px solid var(--slate3);border-radius:var(--radius);padding:14px 12px;text-align:center;transition:all .2s}
+.kpi.highlight{border-color:var(--teal);background:var(--teal4)}
+.kpi-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.kpi-value{font-size:26px;font-weight:900;color:var(--navy);line-height:1}
+.kpi-unit{font-size:11px;color:var(--muted);margin-top:3px}
+.kpi-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;margin-top:4px}
+.badge-ok{background:var(--green2);color:var(--green)}
+.badge-warn{background:var(--amber2);color:var(--amber)}
+.badge-bad{background:var(--red2);color:var(--red)}
+.badge-info{background:var(--teal3);color:var(--teal)}
+.meal-row{display:grid;grid-template-columns:140px 1fr 90px 90px 90px;gap:8px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--slate3)}
+.meal-row:last-child{border:none}
+.meal-name{font-weight:700;font-size:13px;color:var(--navy)}
+.meal-pct{height:10px;background:var(--teal3);border-radius:5px;overflow:hidden}
+.meal-bar{height:100%;background:var(--teal);border-radius:5px;transition:width .5s}
+.meal-val{text-align:right;font-weight:700;color:var(--teal);font-family:'DM Mono',monospace;font-size:13px}
+.meal-pct-label{text-align:center;font-size:11px;color:var(--muted);font-family:'DM Mono',monospace}
+.meal-portions{text-align:center;font-size:12px;font-weight:700;color:var(--navy)}
+.food-table{width:100%;border-collapse:collapse;font-size:12px}
+.food-table th{background:var(--navy);color:#fff;padding:8px 10px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.food-table td{padding:7px 10px;border-bottom:1px solid var(--slate3);vertical-align:top}
+.food-table tr:nth-child(even) td{background:#fafcff}
+.food-table tr:hover td{background:var(--teal4)}
+.group-header td{background:linear-gradient(90deg,var(--teal),var(--teal2)) !important;color:#fff;font-weight:700;font-size:12px}
+.cho-pill{display:inline-block;background:var(--teal3);color:var(--teal);border-radius:20px;padding:2px 10px;font-weight:700;font-family:'DM Mono',monospace;font-size:12px}
+.cho-0{background:#f1f5f9;color:var(--slate)}
+.cho-low{background:#dcfce7;color:var(--green)}
+.cho-mid{background:#fef3c7;color:var(--amber)}
+.cho-high{background:var(--teal3);color:var(--teal)}
+.tracker-meal{background:#fff;border:1.5px solid var(--slate3);border-radius:var(--radius);margin-bottom:12px;overflow:hidden}
+.tracker-meal-head{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:linear-gradient(90deg,var(--navy),var(--navy2));color:#fff}
+.tracker-meal-title{font-weight:700;font-size:14px}
+.tracker-meal-meta{font-size:12px;opacity:.8;font-family:'DM Mono',monospace}
+.tracker-meal-body{padding:12px 16px}
+.food-entry{display:grid;grid-template-columns:1fr 130px 80px 60px;gap:8px;align-items:center;margin-bottom:8px}
+.food-entry input,.food-entry select{padding:7px 10px;border:1.5px solid var(--slate3);border-radius:6px;font:inherit;font-size:12px}
+.food-entry input:focus,.food-entry select:focus{outline:none;border-color:var(--teal)}
+.cho-display{text-align:center;font-weight:700;color:var(--teal);font-family:'DM Mono',monospace}
+.tracker-total{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;background:var(--teal4);border-top:1px solid var(--teal3);font-weight:700;font-size:13px;color:var(--teal)}
+.tracker-summary{background:#fff;border:1.5px solid var(--teal3);border-radius:var(--radius);padding:16px;margin-top:16px}
+.progress-bar{height:14px;background:var(--slate3);border-radius:7px;overflow:hidden;margin-top:6px}
+.progress-fill{height:100%;border-radius:7px;transition:width .5s;background:linear-gradient(90deg,var(--teal2),var(--teal))}
+.progress-fill.warn{background:linear-gradient(90deg,var(--amber),#f59e0b)}
+.progress-fill.bad{background:linear-gradient(90deg,var(--red),#ef4444)}
+.semaforo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:640px){.semaforo-grid{grid-template-columns:1fr}}
+.sem-card{border-radius:var(--radius);padding:14px;border:2px solid transparent;text-align:center}
+.sem-card.verde{background:#f0fdf4;border-color:#86efac}
+.sem-card.amarillo{background:#fffbeb;border-color:#fde68a}
+.sem-card.rojo{background:#fff1f2;border-color:#fecdd3}
+.sem-icon{font-size:28px;margin-bottom:6px}
+.sem-title{font-weight:700;font-size:14px;margin-bottom:6px}
+.sem-items{list-style:none;font-size:12px;color:var(--muted);text-align:left}
+.sem-items li{padding:2px 0;border-bottom:1px dashed #e5e7eb;display:flex;justify-content:space-between}
+.menu-week{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;overflow-x:auto}
+.day-col{min-width:130px}
+.day-header{background:var(--navy);color:#fff;text-align:center;font-weight:700;font-size:11px;padding:8px 4px;border-radius:var(--radius-sm) var(--radius-sm) 0 0}
+.day-meal{padding:6px 8px;border:1px solid var(--slate3);font-size:11px;line-height:1.4}
+.day-meal:nth-child(odd){background:#fafcff}
+.day-meal .meal-type{font-weight:700;font-size:10px;color:var(--teal);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:2px}
+.day-meal .meal-cho{font-family:'DM Mono',monospace;font-size:10px;color:var(--amber);font-weight:700}
+.info-box{background:var(--teal4);border:1px solid var(--teal3);border-radius:var(--radius-sm);padding:12px 16px;font-size:12px;line-height:1.7;color:var(--navy);margin-bottom:12px}
+.warn-box{background:var(--amber2);border:1px solid #fde68a;border-radius:var(--radius-sm);padding:12px 16px;font-size:12px;line-height:1.7;color:#78350f;margin-bottom:12px}
+.alert-box{background:var(--red2);border:1px solid #fecdd3;border-radius:var(--radius-sm);padding:12px 16px;font-size:12px;line-height:1.7;color:#7f1d1d;margin-bottom:12px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tab{padding:7px 14px;border-radius:20px;border:1.5px solid var(--slate3);background:#fff;font:inherit;font-size:12px;font-weight:600;cursor:pointer;color:var(--muted);transition:all .15s}
+.tab.active,.tab:hover{background:var(--teal);color:#fff;border-color:var(--teal)}
+@media print{.sidebar,.topbar .btn,.btn-group{display:none}.app{grid-template-columns:1fr}.panel{display:block!important}.content{padding:8px}}
+.dieta-day-col{min-width:110px;vertical-align:top}
+.dieta-meal-item{padding:6px;border-bottom:1px dashed var(--slate3);font-size:11px}
+.dieta-meal-item:last-child{border:none}
+.cho-tag{display:inline-block;background:var(--teal3);color:var(--teal);border-radius:10px;padding:1px 7px;font-size:9px;font-weight:700;font-family:'DM Mono',monospace}
+.medida-tag{font-size:9px;color:var(--amber);margin-top:2px}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:#f1f5f9}
+::-webkit-scrollbar-thumb{background:var(--teal3);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--teal)}
+.section-divider{height:1px;background:linear-gradient(90deg,var(--teal3),transparent);margin:16px 0}
+.tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;background:var(--teal3);color:var(--teal);margin:2px}
+.formula-box{background:#f8fafc;border:1px solid var(--slate3);border-radius:var(--radius-sm);padding:12px;font-family:'DM Mono',monospace;font-size:12px;color:var(--navy);margin:8px 0}
+.patient-list{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.patient-chip{background:#fff;border:1.5px solid var(--slate3);border-radius:20px;padding:6px 14px;font-size:12px;cursor:pointer;transition:all .15s}
+.patient-chip:hover{border-color:var(--teal);color:var(--teal)}
+.patient-chip.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+.insulin-result{background:var(--teal4);border:1.5px solid var(--teal3);border-radius:var(--radius);padding:16px;margin-top:12px}
+.insulin-result .big{font-size:28px;font-weight:900;color:var(--navy);font-family:'DM Mono',monospace}
+.chart-container{position:relative;height:220px;margin:12px 0}
+</style>
+<base target="_blank">
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="sb-brand">
+    <div class="sb-logo">PROCEL <span>DxO</span></div>
+    <div class="sb-sub">Diabetes y Obesidad · Conteo de CHO v2</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="nav-section">Paciente</div>
+    <div class="nav-item active" onclick="goPanel('panel-datos')" id="nav-datos"><span class="ico">👤</span> Datos del paciente</div>
+    <div class="nav-item" onclick="goPanel('panel-calculo')" id="nav-calculo"><span class="ico">🔥</span> Cálculo calórico</div>
+    <div class="nav-item" onclick="goPanel('panel-insulina')" id="nav-insulina"><span class="ico">💉</span> Insulinoterapia</div>
+    <div class="nav-section">Carbohidratos</div>
+    <div class="nav-item" onclick="goPanel('panel-distribucion')" id="nav-distribucion"><span class="ico">📊</span> Distribución de CHO</div>
+    <div class="nav-item" onclick="goPanel('panel-listas')" id="nav-listas"><span class="ico">🍽️</span> Listas de intercambio</div>
+    <div class="nav-item" onclick="goPanel('panel-tracker')" id="nav-tracker"><span class="ico">✅</span> Registro diario</div>
+    <div class="nav-section">Plan Dietético</div>
+    <div class="nav-item" onclick="goPanel('panel-semaforo')" id="nav-semaforo"><span class="ico">🚦</span> Semáforo alimentario</div>
+    <div class="nav-item" onclick="goPanel('panel-menu')" id="nav-menu"><span class="ico">📋</span> Menú semanal</div>
+    <div class="nav-item" onclick="goPanel('panel-dieta-semana')" id="nav-dieta-semana"><span class="ico">🥗</span> Dieta semanal paciente</div>
+    <div class="nav-item" onclick="goPanel('panel-compras')" id="nav-compras"><span class="ico">🛒</span> Lista de compras</div>
+    <div class="nav-item" onclick="goPanel('panel-autocontrol')" id="nav-autocontrol"><span class="ico">📓</span> Autocontrol semanal</div>
+    <div class="nav-item" onclick="goPanel('panel-conceptos')" id="nav-conceptos"><span class="ico">📚</span> Conceptos clave</div>
+  </nav>
+  <div class="sb-footer"><strong style="opacity:.9">PROCEL Diabetes y Obesidad v2</strong><br>Basado en: SMEA · FDJE Ecuador · ADA 2024 · ISPAD 2018 · Regla 500/1800</div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title" id="topbar-title">👤 Datos del Paciente</div>
+      <div class="topbar-sub" id="topbar-sub">Complete los datos para personalizar el plan</div>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-outline btn-sm" onclick="window.print()">🖨 Imprimir</button>
+      <button class="btn btn-primary btn-sm" onclick="goPanel('panel-calculo');calcularTodo()">▶ Calcular</button>
+      <button class="btn btn-amber btn-sm" onclick="guardarPaciente()">💾 Guardar</button>
+      <button class="btn btn-outline btn-sm" onclick="exportarJSON()">📤 Exportar</button>
+      <input type="file" id="importFile" style="display:none" onchange="importarJSON(this)">
+      <button class="btn btn-outline btn-sm" onclick="document.getElementById('importFile').click()">📥 Importar</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+  <!-- PANEL: DATOS -->
+  <div class="panel active" id="panel-datos">
+    <div class="card">
+      <div class="card-header"><div class="card-title">👤 Datos de Identificación</div></div>
+      <div class="card-body">
+        <div class="patient-list" id="patient-list"></div>
+        <div class="fg fg3">
+          <div class="field"><label>Nombre completo</label><input id="pt-nombre" placeholder="Apellido, Nombre"></div>
+          <div class="field"><label>Fecha de nacimiento</label><input id="pt-fnac" type="date" onchange="autoEdad()"></div>
+          <div class="field"><label>Edad (años)</label><input id="pt-edad" type="number" min="1" max="110" placeholder="45"></div>
+        </div>
+        <div class="fg fg4" style="margin-top:14px">
+          <div class="field"><label>Sexo</label><select id="pt-sexo"><option value="F">Femenino</option><option value="M">Masculino</option></select></div>
+          <div class="field"><label>Peso actual (kg)</label><input id="pt-peso" type="number" step="0.1" placeholder="70.0"></div>
+          <div class="field"><label>Talla (cm)</label><input id="pt-talla" type="number" step="0.1" placeholder="165"></div>
+          <div class="field"><label>IMC</label><input id="pt-imc" readonly placeholder="—"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">🏃 Estilo de vida y condición clínica</div></div>
+      <div class="card-body">
+        <div class="fg fg3">
+          <div class="field"><label>Actividad física</label>
+            <select id="pt-af">
+              <option value="1.2">Sedentario x 1.2</option>
+              <option value="1.375">Ligero 1-3 dias x 1.375</option>
+              <option value="1.55" selected>Moderado 3-5 dias x 1.55</option>
+              <option value="1.725">Fuerte 6-7 dias x 1.725</option>
+              <option value="1.9">Muy fuerte x 1.9</option>
+            </select>
+          </div>
+          <div class="field"><label>Factor de estres</label>
+            <select id="pt-fe">
+              <option value="1.0">Sin factor (1.0)</option>
+              <option value="1.1">Cirugia menor (1.1)</option>
+              <option value="1.2">Cirugia mayor (1.2)</option>
+              <option value="1.3">Trauma cerrado (1.3)</option>
+              <option value="1.4">Infeccion moderada (1.4)</option>
+              <option value="1.6">Sepsis (1.6)</option>
+              <option value="1.5">Quemadura >40% (1.5)</option>
+              <option value="2.0">Quemadura >41% (2.0)</option>
+            </select>
+          </div>
+          <div class="field"><label>Objetivo calorico</label>
+            <select id="pt-objetivo">
+              <option value="mantenimiento">Mantenimiento</option>
+              <option value="perdida">Perdida de peso (-500 kcal)</option>
+              <option value="ganancia">Ganancia muscular (+300 kcal)</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg fg4" style="margin-top:14px">
+          <div class="field"><label>Diagnostico principal</label>
+            <select id="pt-dx" onchange="checkAlerts()">
+              <option value="base">Sin patologia</option>
+              <option value="dm2">Diabetes Mellitus tipo 2</option>
+              <option value="prediabetes">Prediabetes</option>
+              <option value="obesidad">Obesidad</option>
+              <option value="sm">Sind. metabolico</option>
+              <option value="hta">Hipertension</option>
+              <option value="masld">MAFLD/MASLD</option>
+              <option value="erc">Enfermedad renal cronica</option>
+            </select>
+          </div>
+          <div class="field"><label>N de comidas/dia</label>
+            <select id="pt-comidas">
+              <option value="3">3 comidas</option>
+              <option value="5" selected>5 comidas (+2 colaciones)</option>
+              <option value="6">6 comidas (+3 colaciones)</option>
+            </select>
+          </div>
+          <div class="field"><label>Peso objetivo (kg)</label><input id="pt-peso-obj" type="number" step="0.1" placeholder="65.0"></div>
+          <div class="field"><label>Circunf. cintura (cm)</label><input id="pt-cintura" type="number" step="0.5" placeholder="88"></div>
+        </div>
+        <div class="fg fg2" style="margin-top:14px">
+          <div class="field"><label>TDD (insulina total diaria) UI</label><input id="pt-tdd" type="number" placeholder="Solo si usa insulina"></div>
+          <div class="field"><label>Tipo de insulina prandial</label>
+            <select id="pt-insulin-type">
+              <option value="analogo">Analogo rapido (lispro/aspart)</option>
+              <option value="regular">Insulina regular</option>
+              <option value="none" selected>No usa insulina</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Observaciones clinicas</div></div>
+      <div class="card-body">
+        <div class="fg fg2">
+          <div class="field"><label>Antecedentes patologicos</label><input id="pt-app" placeholder="DM2, HTA, dislipidemia..."></div>
+          <div class="field"><label>Medicacion actual</label><input id="pt-meds" placeholder="Metformina 850mg BID..."></div>
+        </div>
+        <div class="fg fg2" style="margin-top:14px">
+          <div class="field"><label>Glucosa promedio (mg/dL)</label><input id="pt-glucosa" type="number" placeholder="Ej: 140"></div>
+          <div class="field"><label>HbA1c estimada (%)</label><input id="pt-hba1c" type="number" step="0.1" placeholder="Ej: 7.2"></div>
+        </div>
+        <div style="margin-top:14px" class="btn-group">
+          <button class="btn btn-primary" onclick="goPanel('panel-calculo');calcularTodo()">Calcular requerimientos</button>
+          <button class="btn btn-outline" onclick="nuevoPaciente()">Nuevo paciente</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: CALCULO CALORICO -->
+  <div class="panel" id="panel-calculo">
+    <div class="info-box">
+      <strong>Harris-Benedict (1919) / Mifflin-St Jeor (1990):</strong><br>
+      <span style="font-family:'DM Mono',monospace;font-size:12px">
+        GER_HB: Mujer = 655 + 9.56*P + 1.85*T - 4.68*E | Hombre = 66 + 13.75*P + 5.0*T - 6.77*E<br>
+        GER_MSJ: Mujer = 10*P + 6.25*T - 5*E - 161 | Hombre = 10*P + 6.25*T - 5*E + 5
+      </span>
+    </div>
+    <div id="alert-container"></div>
+    <div class="kpi-grid" id="kpi-container">
+      <div class="kpi"><div class="kpi-label">GER HB</div><div class="kpi-value" id="kpi-ger">—</div><div class="kpi-unit">kcal/dia</div></div>
+      <div class="kpi highlight"><div class="kpi-label">GET Total</div><div class="kpi-value" id="kpi-get">—</div><div class="kpi-unit">kcal/dia</div></div>
+      <div class="kpi"><div class="kpi-label">Proteinas</div><div class="kpi-value" id="kpi-prot">—</div><div class="kpi-unit">g/dia</div><div id="kpi-prot-pct" class="kpi-badge badge-info"></div></div>
+      <div class="kpi"><div class="kpi-label">Carbohidratos</div><div class="kpi-value" id="kpi-cho">—</div><div class="kpi-unit">g/dia</div><div id="kpi-cho-pct" class="kpi-badge badge-info"></div></div>
+      <div class="kpi"><div class="kpi-label">Grasas</div><div class="kpi-value" id="kpi-fat">—</div><div class="kpi-unit">g/dia</div><div id="kpi-fat-pct" class="kpi-badge badge-info"></div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Resultados del calculo</div></div>
+      <div class="card-body">
+        <div class="fg fg4">
+          <div class="field"><label>GER HB kcal/dia</label><input id="res-ger" readonly></div>
+          <div class="field"><label>GER MSJ kcal/dia</label><input id="res-ger-msj" readonly></div>
+          <div class="field"><label>Factor actividad</label><input id="res-af" readonly></div>
+          <div class="field"><label>Factor estres</label><input id="res-fe" readonly></div>
+        </div>
+        <div class="fg fg4" style="margin-top:14px">
+          <div class="field"><label>GET Final kcal/dia</label><input id="res-get" readonly></div>
+          <div class="field"><label>CHO g/dia</label><input id="res-cho" readonly></div>
+          <div class="field"><label>Porciones CHO/dia</label><input id="res-porciones" readonly></div>
+          <div class="field"><label>Fibra g/dia</label><input id="res-fibra" readonly></div>
+        </div>
+        <div class="fg fg3" style="margin-top:14px">
+          <div class="field"><label>Proteinas g/dia</label><input id="res-prot" readonly></div>
+          <div class="field"><label>Grasas g/dia</label><input id="res-fat" readonly></div>
+          <div class="field"><label>Prot g/kg/dia</label><input id="res-gkg" readonly></div>
+        </div>
+        <div style="margin-top:14px" class="btn-group">
+          <button class="btn btn-primary" onclick="calcularTodo()">Recalcular</button>
+          <button class="btn btn-outline" onclick="goPanel('panel-distribucion')">Ver distribucion</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Composicion corporal</div></div>
+      <div class="card-body">
+        <div class="fg fg4">
+          <div class="field"><label>IMC kg/m2</label><input id="res-imc" readonly></div>
+          <div class="field"><label>Categoria IMC</label><input id="res-imc-cat" readonly></div>
+          <div class="field"><label>Peso ideal kg</label><input id="res-pi" readonly></div>
+          <div class="field"><label>Peso ajustado kg</label><input id="res-paj" readonly></div>
+        </div>
+        <div id="composicion-interp" class="info-box" style="margin-top:12px;display:none"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: INSULINOTERAPIA -->
+  <div class="panel" id="panel-insulina">
+    <div class="info-box">
+      <strong>Reglas de calculo para insulinoterapia intensificada:</strong><br>
+      Ratio I:CHO = 500 / TDD (analogos) o 450 / TDD (regular) | FS = 1800 / TDD (mg/dL por UI de correccion)
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Parametros del paciente</div></div>
+      <div class="card-body">
+        <div class="fg fg3">
+          <div class="field"><label>TDD UI/dia</label><input id="ins-tdd" type="number" placeholder="Ej: 40"></div>
+          <div class="field"><label>Tipo de insulina</label>
+            <select id="ins-type">
+              <option value="500">Analogo rapido (Regla 500)</option>
+              <option value="450">Insulina regular (Regla 450)</option>
+            </select>
+          </div>
+          <div class="field"><label>Meta de glucosa mg/dL</label><input id="ins-target" type="number" value="100"></div>
+        </div>
+        <div style="margin-top:14px"><button class="btn btn-primary" onclick="calcularInsulina()">Calcular parametros</button></div>
+      </div>
+    </div>
+    <div class="card" id="ins-results" style="display:none">
+      <div class="card-header"><div class="card-title">Resultados de insulinoterapia</div></div>
+      <div class="card-body">
+        <div class="fg fg3">
+          <div class="insulin-result" style="text-align:center">
+            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:4px">Ratio I:CHO</div>
+            <div class="big" id="ins-ratio">—</div>
+            <div style="font-size:12px;color:var(--muted)">1 UI por cada <span id="ins-ratio-g" style="color:var(--teal);font-weight:700">—</span> g CHO</div>
+          </div>
+          <div class="insulin-result" style="text-align:center">
+            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:4px">Factor de Sensibilidad</div>
+            <div class="big" id="ins-fs">—</div>
+            <div style="font-size:12px;color:var(--muted)">1 UI baja <span id="ins-fs-val" style="color:var(--teal);font-weight:700">—</span> mg/dL</div>
+          </div>
+          <div class="insulin-result" style="text-align:center">
+            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:4px">Dosis basal estimada</div>
+            <div class="big" id="ins-basal">—</div>
+            <div style="font-size:12px;color:var(--muted)">~50% del TDD</div>
+          </div>
+        </div>
+        <div class="section-divider"></div>
+        <div class="card-header" style="padding-left:0;border:none;background:none"><div class="card-title">Calculadora de bolo por comida</div></div>
+        <div class="fg fg4">
+          <div class="field"><label>CHO de la comida (g)</label><input id="bolo-cho" type="number" placeholder="Ej: 45"></div>
+          <div class="field"><label>Glucemia actual (mg/dL)</label><input id="bolo-glu" type="number" placeholder="Ej: 140"></div>
+          <div class="field"><label>Glucemia objetivo (mg/dL)</label><input id="bolo-target" type="number" value="100"></div>
+          <div class="field"><label>Dosis de bolo (UI)</label><input id="bolo-result" readonly style="font-size:16px;color:var(--navy)"></div>
+        </div>
+        <div style="margin-top:12px"><button class="btn btn-primary" onclick="calcularBolo()">Calcular bolo</button></div>
+        <div id="bolo-explanation" class="info-box" style="margin-top:12px;display:none"></div>
+      </div>
+    </div>
+  </div>
+

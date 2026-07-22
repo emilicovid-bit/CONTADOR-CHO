@@ -141,6 +141,7 @@ code,mono{font-family:'DM Mono',monospace}
 .chart-container{position:relative;height:220px;margin:12px 0}
 </style>
 <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 <div class="app">
@@ -406,3 +407,1387 @@ code,mono{font-family:'DM Mono',monospace}
     </div>
   </div>
 
+  <!-- PANEL: DISTRIBUCION CHO -->
+  <div class="panel" id="panel-distribucion">
+    <div class="info-box">
+      <strong>Distribucion de carbohidratos por comida:</strong> La distribucion varia segun el numero de comidas diarias. 
+      Generalmente: Desayuno 25-30%, Almuerzo 35-40%, Cena 25-30%, Colaciones 5-10% cada una.
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">📊 Distribucion de CHO por comida</div></div>
+      <div class="card-body">
+        <div id="distribucion-container">
+          <div class="meal-row">
+            <div class="meal-name">Desayuno</div>
+            <div class="meal-pct"><div class="meal-bar" id="bar-desayuno" style="width:0%"></div></div>
+            <div class="meal-pct-label" id="pct-desayuno">0%</div>
+            <div class="meal-val" id="val-desayuno">— g</div>
+            <div class="meal-portions" id="por-desayuno">— porc</div>
+          </div>
+          <div class="meal-row">
+            <div class="meal-name">Colacion AM</div>
+            <div class="meal-pct"><div class="meal-bar" id="bar-colam" style="width:0%"></div></div>
+            <div class="meal-pct-label" id="pct-colam">0%</div>
+            <div class="meal-val" id="val-colam">— g</div>
+            <div class="meal-portions" id="por-colam">— porc</div>
+          </div>
+          <div class="meal-row">
+            <div class="meal-name">Almuerzo</div>
+            <div class="meal-pct"><div class="meal-bar" id="bar-almuerzo" style="width:0%"></div></div>
+            <div class="meal-pct-label" id="pct-almuerzo">0%</div>
+            <div class="meal-val" id="val-almuerzo">— g</div>
+            <div class="meal-portions" id="por-almuerzo">— porc</div>
+          </div>
+          <div class="meal-row">
+            <div class="meal-name">Colacion PM</div>
+            <div class="meal-pct"><div class="meal-bar" id="bar-colpm" style="width:0%"></div></div>
+            <div class="meal-pct-label" id="pct-colpm">0%</div>
+            <div class="meal-val" id="val-colpm">— g</div>
+            <div class="meal-portions" id="por-colpm">— porc</div>
+          </div>
+          <div class="meal-row">
+            <div class="meal-name">Cena</div>
+            <div class="meal-pct"><div class="meal-bar" id="bar-cena" style="width:0%"></div></div>
+            <div class="meal-pct-label" id="pct-cena">0%</div>
+            <div class="meal-val" id="val-cena">— g</div>
+            <div class="meal-portions" id="por-cena">— porc</div>
+          </div>
+          <div class="meal-row" id="row-col3" style="display:none">
+            <div class="meal-name">Colacion noche</div>
+            <div class="meal-pct"><div class="meal-bar" id="bar-col3" style="width:0%"></div></div>
+            <div class="meal-pct-label" id="pct-col3">0%</div>
+            <div class="meal-val" id="val-col3">— g</div>
+            <div class="meal-portions" id="por-col3">— porc</div>
+          </div>
+        </div>
+        <div class="tracker-summary" style="margin-top:16px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span><strong>Total CHO diario:</strong></span>
+            <span id="dist-total-cho" style="font-size:20px;font-weight:900;color:var(--navy);font-family:'DM Mono',monospace">— g</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+            <span><strong>Total porciones:</strong></span>
+            <span id="dist-total-porc" style="font-size:18px;font-weight:700;color:var(--teal);font-family:'DM Mono',monospace">— porciones</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: LISTAS DE INTERCAMBIO -->
+  <div class="panel" id="panel-listas">
+    <div class="info-box">
+      <strong>Lista de intercambio de carbohidratos (15g CHO = 1 porcion):</strong> 
+      Cada grupo contiene alimentos intercambiables por su contenido similar de carbohidratos.
+    </div>
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('tab-cereales')">Cereales</button>
+      <button class="tab" onclick="showTab('tab-frutas')">Frutas</button>
+      <button class="tab" onclick="showTab('tab-lacteos')">Lacteos</button>
+      <button class="tab" onclick="showTab('tab-verduras')">Verduras</button>
+      <button class="tab" onclick="showTab('tab-legumbres')">Legumbres</button>
+      <button class="tab" onclick="showTab('tab-grasas')">Grasas</button>
+      <button class="tab" onclick="showTab('tab-proteinas')">Proteinas</button>
+    </div>
+    <div id="tab-cereales" class="tab-content">
+      <div class="card">
+        <div class="card-header"><div class="card-title">🌾 Cereales, panes y tuberculos (15g CHO/porcion)</div></div>
+        <div class="card-body" style="padding:0">
+          <table class="food-table">
+            <tr><th>Alimento</th><th>Porcion</th><th>CHO (g)</th><th>IG</th></tr>
+            <tr><td>Arroz blanco cocido</td><td>1/3 taza (50g)</td><td><span class="cho-pill cho-mid">15</span></td><td>73</td></tr>
+            <tr><td>Arroz integral cocido</td><td>1/3 taza (50g)</td><td><span class="cho-pill cho-mid">15</span></td><td>68</td></tr>
+            <tr><td>Pasta cocida</td><td>1/3 taza (50g)</td><td><span class="cho-pill cho-mid">15</span></td><td>49</td></tr>
+            <tr><td>Pan blanco</td><td>1 rebanada (25g)</td><td><span class="cho-pill cho-mid">15</span></td><td>75</td></tr>
+            <tr><td>Pan integral</td><td>1 rebanada (30g)</td><td><span class="cho-pill cho-mid">15</span></td><td>54</td></tr>
+            <tr><td>Tortilla de maiz</td><td>1 pieza (30g)</td><td><span class="cho-pill cho-mid">15</span></td><td>52</td></tr>
+            <tr><td>Avena en hojuelas</td><td>1/2 taza (40g)</td><td><span class="cho-pill cho-mid">15</span></td><td>55</td></tr>
+            <tr><td>Papa cocida</td><td>1/2 taza (75g)</td><td><span class="cho-pill cho-mid">15</span></td><td>78</td></tr>
+            <tr><td>Camote cocido</td><td>1/3 taza (60g)</td><td><span class="cho-pill cho-mid">15</span></td><td>63</td></tr>
+            <tr><td>Yuca cocida</td><td>1/3 taza (40g)</td><td><span class="cho-pill cho-mid">15</span></td><td>46</td></tr>
+            <tr><td>Quinoa cocida</td><td>1/4 taza (45g)</td><td><span class="cho-pill cho-mid">15</span></td><td>53</td></tr>
+            <tr><td>Cereal sin azucar</td><td>1/2 taza (20g)</td><td><span class="cho-pill cho-mid">15</span></td><td>45-65</td></tr>
+            <tr><td>Galletas de soda</td><td>3 unidades (20g)</td><td><span class="cho-pill cho-mid">15</span></td><td>74</td></tr>
+            <tr><td>Arepa</td><td>1/2 unidad (40g)</td><td><span class="cho-pill cho-mid">15</span></td><td>72</td></tr>
+            <tr><td>Mote cocido</td><td>1/3 taza (50g)</td><td><span class="cho-pill cho-mid">15</span></td><td>48</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id="tab-frutas" class="tab-content" style="display:none">
+      <div class="card">
+        <div class="card-header"><div class="card-title">🍎 Frutas (15g CHO/porcion)</div></div>
+        <div class="card-body" style="padding:0">
+          <table class="food-table">
+            <tr><th>Alimento</th><th>Porcion</th><th>CHO (g)</th><th>IG</th></tr>
+            <tr><td>Manzana</td><td>1 pequena (120g)</td><td><span class="cho-pill cho-mid">15</span></td><td>36</td></tr>
+            <tr><td>Pera</td><td>1/2 unidad (100g)</td><td><span class="cho-pill cho-mid">15</span></td><td>38</td></tr>
+            <tr><td>Naranja</td><td>1 mediana (130g)</td><td><span class="cho-pill cho-mid">15</span></td><td>43</td></tr>
+            <tr><td>Mandarina</td><td>2 medianas (150g)</td><td><span class="cho-pill cho-mid">15</span></td><td>47</td></tr>
+            <tr><td>Platano maduro</td><td>1/2 unidad (50g)</td><td><span class="cho-pill cho-mid">15</span></td><td>62</td></tr>
+            <tr><td>Platano verde</td><td>1/2 unidad (60g)</td><td><span class="cho-pill cho-mid">15</span></td><td>42</td></tr>
+            <tr><td>Uvas</td><td>15 unidades (80g)</td><td><span class="cho-pill cho-mid">15</span></td><td>59</td></tr>
+            <tr><td>Fresa</td><td>1 taza (150g)</td><td><span class="cho-pill cho-mid">15</span></td><td>41</td></tr>
+            <tr><td>Melon</td><td>1 taza (160g)</td><td><span class="cho-pill cho-mid">15</span></td><td>65</td></tr>
+            <tr><td>Papaya</td><td>1 taza (140g)</td><td><span class="cho-pill cho-mid">15</span></td><td>59</td></tr>
+            <tr><td>Pina</td><td>3/4 taza (115g)</td><td><span class="cho-pill cho-mid">15</span></td><td>66</td></tr>
+            <tr><td>Mango</td><td>1/2 unidad (100g)</td><td><span class="cho-pill cho-mid">15</span></td><td>51</td></tr>
+            <tr><td>Mora</td><td>1 taza (140g)</td><td><span class="cho-pill cho-mid">15</span></td><td>25</td></tr>
+            <tr><td>Durazno</td><td>1 mediano (110g)</td><td><span class="cho-pill cho-mid">15</span></td><td>42</td></tr>
+            <tr><td>Sandia</td><td>1 1/2 taza (250g)</td><td><span class="cho-pill cho-mid">15</span></td><td>72</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id="tab-lacteos" class="tab-content" style="display:none">
+      <div class="card">
+        <div class="card-header"><div class="card-title">🥛 Lacteos (12-15g CHO/porcion)</div></div>
+        <div class="card-body" style="padding:0">
+          <table class="food-table">
+            <tr><th>Alimento</th><th>Porcion</th><th>CHO (g)</th><th>IG</th></tr>
+            <tr><td>Leche entera</td><td>1 taza (240ml)</td><td><span class="cho-pill cho-mid">12</span></td><td>39</td></tr>
+            <tr><td>Leche descremada</td><td>1 taza (240ml)</td><td><span class="cho-pill cho-mid">12</span></td><td>37</td></tr>
+            <tr><td>Yogurt natural</td><td>3/4 taza (170g)</td><td><span class="cho-pill cho-mid">12</span></td><td>36</td></tr>
+            <tr><td>Yogurt con frutas</td><td>1/2 taza (115g)</td><td><span class="cho-pill cho-high">15</span></td><td>52</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id="tab-verduras" class="tab-content" style="display:none">
+      <div class="card">
+        <div class="card-header"><div class="card-title">🥬 Verduras (5g CHO/porcion = libres)</div></div>
+        <div class="card-body" style="padding:0">
+          <table class="food-table">
+            <tr><th>Alimento</th><th>Porcion</th><th>CHO (g)</th><th>IG</th></tr>
+            <tr><td>Espinaca cocida</td><td>1/2 taza (90g)</td><td><span class="cho-pill cho-low">5</span></td><td>0</td></tr>
+            <tr><td>Brocoli cocido</td><td>1/2 taza (78g)</td><td><span class="cho-pill cho-low">5</span></td><td>10</td></tr>
+            <tr><td>Coliflor cocida</td><td>1/2 taza (62g)</td><td><span class="cho-pill cho-low">5</span></td><td>5</td></tr>
+            <tr><td>Zanahoria cocida</td><td>1/2 taza (78g)</td><td><span class="cho-pill cho-low">5</span></td><td>39</td></tr>
+            <tr><td>Calabacin cocido</td><td>1/2 taza (90g)</td><td><span class="cho-pill cho-low">5</span></td><td>15</td></tr>
+            <tr><td>Pepino</td><td>1 taza (104g)</td><td><span class="cho-pill cho-low">4</span></td><td>15</td></tr>
+            <tr><td>Lechuga</td><td>2 tazas (72g)</td><td><span class="cho-pill cho-low">3</span></td><td>15</td></tr>
+            <tr><td>Tomate</td><td>1 mediano (123g)</td><td><span class="cho-pill cho-low">5</span></td><td>38</td></tr>
+            <tr><td>Pimenton</td><td>1/2 taza (75g)</td><td><span class="cho-pill cho-low">5</span></td><td>15</td></tr>
+            <tr><td>Acelga cocida</td><td>1/2 taza (75g)</td><td><span class="cho-pill cho-low">4</span></td><td>0</td></tr>
+            <tr><td>Berenjena cocida</td><td>1/2 taza (50g)</td><td><span class="cho-pill cho-low">4</span></td><td>15</td></tr>
+            <tr><td>Champinones</td><td>1/2 taza (35g)</td><td><span class="cho-pill cho-low">2</span></td><td>10</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id="tab-legumbres" class="tab-content" style="display:none">
+      <div class="card">
+        <div class="card-header"><div class="card-title">🫘 Legumbres (15g CHO/porcion)</div></div>
+        <div class="card-body" style="padding:0">
+          <table class="food-table">
+            <tr><th>Alimento</th><th>Porcion</th><th>CHO (g)</th><th>IG</th></tr>
+            <tr><td>Frijoles cocidos</td><td>1/2 taza (85g)</td><td><span class="cho-pill cho-mid">20</span></td><td>38</td></tr>
+            <tr><td>Lentejas cocidas</td><td>1/2 taza (100g)</td><td><span class="cho-pill cho-mid">20</span></td><td>32</td></tr>
+            <tr><td>Garbanzos cocidos</td><td>1/2 taza (82g)</td><td><span class="cho-pill cho-mid">22</span></td><td>28</td></tr>
+            <tr><td>Habas cocidas</td><td>1/2 taza (85g)</td><td><span class="cho-pill cho-mid">16</span></td><td>33</td></tr>
+            <tr><td>Alverjas cocidas</td><td>1/2 taza (80g)</td><td><span class="cho-pill cho-mid">12</span></td><td>48</td></tr>
+            <tr><td>Edamame</td><td>1/2 taza (78g)</td><td><span class="cho-pill cho-mid">7</span></td><td>18</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id="tab-grasas" class="tab-content" style="display:none">
+      <div class="card">
+        <div class="card-header"><div class="card-title">🫒 Grasas (0g CHO/porcion)</div></div>
+        <div class="card-body" style="padding:0">
+          <table class="food-table">
+            <tr><th>Alimento</th><th>Porcion</th><th>CHO (g)</th><th>Calorias</th></tr>
+            <tr><td>Aceite de oliva</td><td>1 cda (14g)</td><td><span class="cho-pill cho-0">0</span></td><td>120</td></tr>
+            <tr><td>Aguacate</td><td>1/4 unidad (50g)</td><td><span class="cho-pill cho-low">4</span></td><td>80</td></tr>
+            <tr><td>Almendras</td><td>10 unidades (15g)</td><td><span class="cho-pill cho-low">3</span></td><td>90</td></tr>
+            <tr><td>Nueces</td><td>5 unidades (15g)</td><td><span class="cho-pill cho-low">2</span></td><td>95</td></tr>
+            <tr><td>Mani</td><td>1 cda (16g)</td><td><span class="cho-pill cho-low">3</span></td><td>95</td></tr>
+            <tr><td>Aceite de canola</td><td>1 cda (14g)</td><td><span class="cho-pill cho-0">0</span></td><td>124</td></tr>
+            <tr><td>Mantequilla</td><td>1 cda (14g)</td><td><span class="cho-pill cho-0">0</span></td><td>100</td></tr>
+            <tr><td>Semillas de chia</td><td>1 cda (12g)</td><td><span class="cho-pill cho-low">5</span></td><td>60</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id="tab-proteinas" class="tab-content" style="display:none">
+      <div class="card">
+        <div class="card-header"><div class="card-title">🍗 Proteinas (0g CHO/porcion)</div></div>
+        <div class="card-body" style="padding:0">
+          <table class="food-table">
+            <tr><th>Alimento</th><th>Porcion</th><th>CHO (g)</th><th>Proteina (g)</th></tr>
+            <tr><td>Pollo sin piel</td><td>1 porcion (85g)</td><td><span class="cho-pill cho-0">0</span></td><td>26</td></tr>
+            <tr><td>Pavo sin piel</td><td>1 porcion (85g)</td><td><span class="cho-pill cho-0">0</span></td><td>25</td></tr>
+            <tr><td>Carne de res magra</td><td>1 porcion (85g)</td><td><span class="cho-pill cho-0">0</span></td><td>22</td></tr>
+            <tr><td>Pescado</td><td>1 porcion (85g)</td><td><span class="cho-pill cho-0">0</span></td><td>22</td></tr>
+            <tr><td>Huevos</td><td>2 unidades (100g)</td><td><span class="cho-pill cho-0">1</span></td><td>12</td></tr>
+            <tr><td>Queso fresco</td><td>1 porcion (30g)</td><td><span class="cho-pill cho-0">1</span></td><td>7</td></tr>
+            <tr><td>Atun en agua</td><td>1/2 lata (80g)</td><td><span class="cho-pill cho-0">0</span></td><td>20</td></tr>
+            <tr><td>Tofu</td><td>1/2 taza (125g)</td><td><span class="cho-pill cho-low">3</span></td><td>10</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- PANEL: TRACKER -->
+  <div class="panel" id="panel-tracker">
+    <div class="info-box">
+      <strong>Registro diario de CHO:</strong> Registre los alimentos consumidos en cada comida para calcular el total de carbohidratos del dia.
+    </div>
+    <div id="tracker-meals"></div>
+    <div class="tracker-summary">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span><strong>Total CHO del dia:</strong></span>
+        <span id="tracker-total-cho" style="font-size:24px;font-weight:900;color:var(--navy);font-family:'DM Mono',monospace">0 g</span>
+      </div>
+      <div style="margin-top:8px">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">Progreso vs objetivo diario</div>
+        <div class="progress-bar"><div class="progress-fill" id="tracker-progress" style="width:0%"></div></div>
+        <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:11px;color:var(--muted)">
+          <span id="tracker-pct">0%</span><span id="tracker-obj">Objetivo: — g</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: SEMAFORO -->
+  <div class="panel" id="panel-semaforo">
+    <div class="info-box">
+      <strong>Sistema semaforo alimentario:</strong> Clasificacion visual de alimentos segun su impacto glicemico y valor nutricional. 
+      Verde = libre/consumo frecuente, Amarillo = moderado, Rojo = limitar/evitar.
+    </div>
+    <div class="semaforo-grid">
+      <div class="sem-card verde">
+        <div class="sem-icon">🟢</div>
+        <div class="sem-title">Verde - Consumo libre/frecuente</div>
+        <ul class="sem-items">
+          <li><span>Verduras no almidonadas</span><span>Libre</span></li>
+          <li><span>Agua, infusiones</span><span>Libre</span></li>
+          <li><span>Proteinas magras</span><span>Libre</span></li>
+          <li><span>Grasas saludables</span><span>Moderado</span></li>
+          <li><span>Frutas de bajo IG</span><span>1-2/dia</span></li>
+        </ul>
+      </div>
+      <div class="sem-card amarillo">
+        <div class="sem-icon">🟡</div>
+        <div class="sem-title">Amarillo - Consumo moderado</div>
+        <ul class="sem-items">
+          <li><span>Cereales integrales</span><span>3-4 porc/dia</span></li>
+          <li><span>Frutas de IG medio</span><span>1-2/dia</span></li>
+          <li><span>Lacteos sin azucar</span><span>2-3/dia</span></li>
+          <li><span>Legumbres</span><span>3-4 porc/semana</span></li>
+          <li><span>Tuberculos</span><span>2-3 porc/semana</span></li>
+        </ul>
+      </div>
+      <div class="sem-card rojo">
+        <div class="sem-icon">🔴</div>
+        <div class="sem-title">Rojo - Limitar o evitar</div>
+        <ul class="sem-items">
+          <li><span>Azucares y dulces</span><span>Evitar</span></li>
+          <li><span>Bebidas azucaradas</span><span>Evitar</span></li>
+          <li><span>Harinas refinadas</span><span>Limitar</span></li>
+          <li><span>Ultraprocesados</span><span>Evitar</span></li>
+          <li><span>Grasas trans</span><span>Evitar</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: MENU SEMANAL -->
+  <div class="panel" id="panel-menu">
+    <div class="info-box">
+      <strong>Menu semanal tipo:</strong> Ejemplo de distribucion de comidas con conteo de CHO. 
+      Ajustar segun requerimientos caloricos individuales.
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">📋 Menu semanal de ejemplo (1800 kcal)</div></div>
+      <div class="card-body" style="padding:0;overflow-x:auto">
+        <table class="food-table">
+          <tr>
+            <th style="min-width:100px">Comida</th>
+            <th class="dieta-day-col"><div class="day-header">Lunes</div></th>
+            <th class="dieta-day-col"><div class="day-header">Martes</div></th>
+            <th class="dieta-day-col"><div class="day-header">Miercoles</div></th>
+            <th class="dieta-day-col"><div class="day-header">Jueves</div></th>
+            <th class="dieta-day-col"><div class="day-header">Viernes</div></th>
+            <th class="dieta-day-col"><div class="day-header">Sabado</div></th>
+            <th class="dieta-day-col"><div class="day-header">Domingo</div></th>
+          </tr>
+          <tr>
+            <td style="font-weight:700;color:var(--teal)">Desayuno<br><span style="font-size:10px;color:var(--muted)">~45g CHO</span></td>
+            <td class="dieta-day-col">
+              <div class="dieta-meal-item">Avena + leche <span class="cho-tag">30g</span><div class="medida-tag">1/2 taza + 1 taza</div></div>
+              <div class="dieta-meal-item">Fruta <span class="cho-tag">15g</span><div class="medida-tag">1 unidad</div></div>
+            </td>
+            <td class="dieta-day-col">
+              <div class="dieta-meal-item">Pan integral <span class="cho-tag">30g</span><div class="medida-tag">2 reb</div></div>
+              <div class="dieta-meal-item">Huevo + fruta <span class="cho-tag">15g</span><div class="medida-tag">2 huevos</div></div>
+            </td>
+            <td class="dieta-day-col">
+              <div class="dieta-meal-item">Arepa <span class="cho-tag">30g</span><div class="medida-tag">1 unidad</div></div>
+              <div class="dieta-meal-item">Queso + fruta <span class="cho-tag">15g</span><div class="medida-tag">30g + 1 unid</div></div>
+            </td>
+            <td class="dieta-day-col">
+              <div class="dieta-meal-item">Cereal integral <span class="cho-tag">30g</span><div class="medida-tag">3/4 taza</div></div>
+              <div class="dieta-meal-item">Yogurt + fruta <span class="cho-tag">15g</span><div class="medida-tag">1/2 taza</div></div>
+            </td>
+            <td class="dieta-day-col">
+              <div class="dieta-meal-item">Tortilla maiz <span class="cho-tag">30g</span><div class="medida-tag">2 unidades</div></div>
+              <div class="dieta-meal-item">Frijoles + fruta <span class="cho-tag">15g</span><div class="medida-tag">1/2 taza</div></div>
+            </td>
+            <td class="dieta-day-col">
+              <div class="dieta-meal-item">Pan integral <span class="cho-tag">30g</span><div class="medida-tag">2 reb</div></div>
+              <div class="dieta-meal-item">Aguacate + fruta <span class="cho-tag">15g</span><div class="medida-tag">1/4 aguacate</div></div>
+            </td>
+            <td class="dieta-day-col">
+              <div class="dieta-meal-item">Quinoa cocida <span class="cho-tag">30g</span><div class="medida-tag">1/2 taza</div></div>
+              <div class="dieta-meal-item">Leche + fruta <span class="cho-tag">15g</span><div class="medida-tag">1 taza</div></div>
+            </td>
+          </tr>
+          <tr>
+            <td style="font-weight:700;color:var(--teal)">Colacion<br><span style="font-size:10px;color:var(--muted)">~15g CHO</span></td>
+            <td class="dieta-day-col"><div class="dieta-meal-item">Yogurt natural <span class="cho-tag">12g</span><div class="medida-tag">3/4 taza</div></div></td>
+            <td class="dieta-day-col"><div class="dieta-meal-item">Fruta <span class="cho-tag">15g</span><div class="medida-tag">1 unidad</div></div></td>
+            <td class="dieta-day-col"><div class="dieta-meal-item">Almendras + fruta <span class="cho-tag">15g</span><div class="medida-tag">10 alm + 1 fruta</div></div></td>
+            <td class="dieta-day-col"><div class="dieta-meal-item">Leche <span class="cho-tag">12g</span><div class="medida-tag">1 taza</div></div></td>
+            <td class="dieta-day-col"><div class="dieta-meal-item">Fruta <span class="cho-tag">15g</span><div class="medida-tag">1 unidad</div></div></td>
+            <td class="dieta-day-col"><div class="dieta-meal-item">Yogurt <span class="cho-tag">12g</span><div class="medida-tag">3/4 taza</div></div></td>
+            <td class="dieta-day-col"><div class="dieta-meal-item">Fruta <span class="cho-tag">15g</span><div class="medida-tag">1 unidad</div></div></td>
+          </tr>
+          <tr>
+            <td style="font-weight:700;color:var(--teal)">Almuerzo<br><span style="font-size:10px;color:var(--muted)">~60g CHO</span></td>
+            <td class="dieta-day-col">
+              <div class="dieta-meal-item">Arroz integral <span class="cho-tag">30g</span><div class="medida-tag">2/3 taza</div></div>
+              <div class="dieta-meal-item">Pollo + verduras <span class="cho-tag">15g</span><div class="medida-tag">1 porcion</div></div>
+              <div class="dieta-meal-item">Papa <span class="cho-tag">15g</span><div class="medida-tag">1/2 taza</div></div>
+            </td>
+            <td class="dieta-day-col">
+              <div class="dieta-meal-item">Pasta integral <span class="cho-tag">30g</span><div class="medida-tag">2/3 taza</div></div>
+              <div class="dieta-meal-item">Atun + ensalada <span class="cho-tag">15g</span><div class="medida-tag">1 porcion</div></div>
+              <div class="dieta-meal-item">Pan <span class="cho-tag">15g</span><div class="medida-tag">1 reb</div></div>
+            </td>
+            <td class="dieta-day-col">
+              <div class="dieta-meal-item">Lentejas <span class="cho-tag">20g</span><div class="medida-tag">1/2 taza</div></div>
+              <div class="dieta-meal-item">Carne + verduras <span class="cho-tag">15g</span><div class="medida-tag">1 porcion</div></div>
+              <div class="dieta-meal-item">Arroz <span class="cho-tag">15g</span><div class="medida-tag">1/3 taza</div></div>
+            </td>
+            <td class="dieta-day-col">
+              <div class="dieta-meal-item">Quinoa <span class="cho-tag">15g</span><div class="medida-tag">1/4 taza</div></div>
+              <div class="dieta-meal-item">Pescado + verduras <span class="cho-tag">15g</span><div class="medida-tag">1 porcion</div></div>
+              <div class="dieta-meal-item">Camote <span class="cho-tag">15g</span><div class="medida-tag">1/3 taza</div></div>
+              <div class="dieta-meal-item">Fruta postre <span class="cho-tag">15g</span><div class="medida-tag">1 unidad</div></div>
+            </td>
+            <td class="dieta-day-col">
+              <div class="dieta-meal-item">Arroz <span class="cho-tag">30g</span><div class="medida-tag">2/3 taza</div></div>
+              <div class="dieta-meal-item">Frijoles <span class="cho-tag">15g</span><div class="medida-tag">1/4 taza</div></div>
+              <div class="dieta-meal-item">Pollo + verduras <span class="cho-tag">15g</span><div class="medida-tag">1 porcion</div></div>
+            </td>
+            <td class="dieta-day-col">
+              <div class="dieta-meal-item">Mote <span class="cho-tag">15g</span><div class="medida-tag">1/3 taza</div></div>
+              <div class="dieta-meal-item">Cerdo + ensalada <span class="cho-tag">15g</span><div class="medida-tag">1 porcion</div></div>
+              <div class="dieta-meal-item">Papa <span class="cho-tag">15g</span><div class="medida-tag">1/2 taza</div></div>
+              <div class="dieta-meal-item">Fruta <span class="cho-tag">15g</span><div class="medida-tag">1 unidad</div></div>
+            </td>
+            <td class="dieta-day-col">
+              <div class="dieta-meal-item">Garbanzos <span class="cho-tag">22g</span><div class="medida-tag">1/2 taza</div></div>
+              <div class="dieta-meal-item">Pavo + verduras <span class="cho-tag">15g</span><div class="medida-tag">1 porcion</div></div>
+              <div class="dieta-meal-item">Arroz <span class="cho-tag">15g</span><div class="medida-tag">1/3 taza</div></div>
+            </td>
+          </tr>
+          <tr>
+            <td style="font-weight:700;color:var(--teal)">Colacion PM<br><span style="font-size:10px;color:var(--muted)">~15g CHO</span></td>
+            <td class="dieta-day-col"><div class="dieta-meal-item">Fruta <span class="cho-tag">15g</span><div class="medida-tag">1 unidad</div></div></td>
+            <td class="dieta-day-col"><div class="dieta-meal-item">Yogurt <span class="cho-tag">12g</span><div class="medida-tag">3/4 taza</div></div></td>
+            <td class="dieta-day-col"><div class="dieta-meal-item">Fruta <span class="cho-tag">15g</span><div class="medida-tag">1 unidad</div></div></td>
+            <td class="dieta-day-col"><div class="dieta-meal-item">Nueces + fruta <span class="cho-tag">15g</span><div class="medida-tag">5 nueces</div></div></td>
+            <td class="dieta-day-col"><div class="dieta-meal-item">Leche <span class="cho-tag">12g</span><div class="medida-tag">1 taza</div></div></td>
+            <td class="dieta-day-col"><div class="dieta-meal-item">Fruta <span class="cho-tag">15g</span><div class="medida-tag">1 unidad</div></div></td>
+            <td class="dieta-day-col"><div class="dieta-meal-item">Yogurt <span class="cho-tag">12g</span><div class="medida-tag">3/4 taza</div></div></td>
+          </tr>
+          <tr>
+            <td style="font-weight:700;color:var(--teal)">Cena<br><span style="font-size:10px;color:var(--muted)">~45g CHO</span></td>
+            <td class="dieta-day-col">
+              <div class="dieta-meal-item">Sopa de verduras <span class="cho-tag">15g</span><div class="medida-tag">1 taza</div></div>
+              <div class="dieta-meal-item">Pollo + ensalada <span class="cho-tag">15g</span><div class="medida-tag">1 porcion</div></div>
+              <div class="dieta-meal-item">Pan integral <span class="cho-tag">15g</span><div class="medida-tag">1 reb</div></div>
+            </td>
+            <td class="dieta-day-col">
+              <div class="dieta-meal-item">Lentejas <span class="cho-tag">20g</span><div class="medida-tag">1/2 taza</div></div>
+              <div class="dieta-meal-item">Verduras <span class="cho-tag">5g</span><div class="medida-tag">Libre</div></div>
+              <div class="dieta-meal-item">Queso + pan <span class="cho-tag">15g</span><div class="medida-tag">30g + 1 reb</div></div>
+            </td>
+            <td class="dieta-day-col">
+              <div class="dieta-meal-item">Pescado + verduras <span class="cho-tag">15g</span><div class="medida-tag">1 porcion</div></div>
+              <div class="dieta-meal-item">Arroz <span class="cho-tag">15g</span><div class="medida-tag">1/3 taza</div></div>
+              <div class="dieta-meal-item">Fruta <span class="cho-tag">15g</span><div class="medida-tag">1 unidad</div></div>
+            </td>
+            <td class="dieta-day-col">
+              <div class="dieta-meal-item">Sopa <span class="cho-tag">15g</span><div class="medida-tag">1 taza</div></div>
+              <div class="dieta-meal-item">Huevo + verduras <span class="cho-tag">15g</span><div class="medida-tag">2 huevos</div></div>
+              <div class="dieta-meal-item">Pan <span class="cho-tag">15g</span><div class="medida-tag">1 reb</div></div>
+            </td>
+            <td class="dieta-day-col">
+              <div class="dieta-meal-item">Pollo + verduras <span class="cho-tag">15g</span><div class="medida-tag">1 porcion</div></div>
+              <div class="dieta-meal-item">Papa <span class="cho-tag">15g</span><div class="medida-tag">1/2 taza</div></div>
+              <div class="dieta-meal-item">Fruta <span class="cho-tag">15g</span><div class="medida-tag">1 unidad</div></div>
+            </td>
+            <td class="dieta-day-col">
+              <div class="dieta-meal-item">Atun + ensalada <span class="cho-tag">15g</span><div class="medida-tag">1 porcion</div></div>
+              <div class="dieta-meal-item">Camote <span class="cho-tag">15g</span><div class="medida-tag">1/3 taza</div></div>
+              <div class="dieta-meal-item">Pan <span class="cho-tag">15g</span><div class="medida-tag">1 reb</div></div>
+            </td>
+            <td class="dieta-day-col">
+              <div class="dieta-meal-item">Sopa de verduras <span class="cho-tag">15g</span><div class="medida-tag">1 taza</div></div>
+              <div class="dieta-meal-item">Pavo + ensalada <span class="cho-tag">15g</span><div class="medida-tag">1 porcion</div></div>
+              <div class="dieta-meal-item">Fruta <span class="cho-tag">15g</span><div class="medida-tag">1 unidad</div></div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: DIETA SEMANAL PACIENTE -->
+  <div class="panel" id="panel-dieta-semana">
+    <div class="info-box">
+      <strong>Plan dietetico personalizado:</strong> Este plan se genera automaticamente segun los requerimientos caloricos calculados del paciente.
+      <div style="margin-top:10px">
+        <button class="btn btn-primary btn-sm" onclick="exportarDietaWord()">📄 Exportar dieta a Word</button>
+      </div>
+    </div>
+    <div id="dieta-personalizada-container">
+      <div class="warn-box">
+        Primero calcule los requerimientos caloricos en la pestana "Cálculo calórico" para generar el plan dietetico personalizado.
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: LISTA DE COMPRAS -->
+  <div class="panel" id="panel-compras">
+    <div class="card">
+      <div class="card-header"><div class="card-title">🛒 Lista de compras semanal</div><button class="btn btn-primary btn-sm" onclick="exportarComprasWord()">📄 Exportar a Word</button></div>
+      <div class="card-body">
+        <div class="fg fg3">
+          <div class="field"><label>Numero de personas</label><input id="compras-personas" type="number" value="1" min="1" max="10"></div>
+          <div class="field"><label>Dias de compra</label><input id="compras-dias" type="number" value="7" min="1" max="14"></div>
+          <div class="field"><label></label><button class="btn btn-primary" style="margin-top:18px" onclick="generarListaCompras()">Generar lista</button></div>
+        </div>
+        <div id="lista-compras-result" style="margin-top:16px"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: AUTOCONTROL -->
+  <div class="panel" id="panel-autocontrol">
+    <div class="info-box">
+      <strong>Registro de autocontrol semanal:</strong> Plantilla para registro de glucemias, insulina y CHO consumidos.
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">📓 Registro semanal de autocontrol</div></div>
+      <div class="card-body" style="padding:0;overflow-x:auto">
+        <table class="food-table">
+          <tr>
+            <th style="min-width:80px">Dia/Hora</th>
+            <th>Ayunas</th>
+            <th>Pre-desayuno</th>
+            <th>Post-desayuno<br>(2h)</th>
+            <th>Pre-almuerzo</th>
+            <th>Post-almuerzo<br>(2h)</th>
+            <th>Pre-cena</th>
+            <th>Post-cena<br>(2h)</th>
+            <th>Antes dormir</th>
+          </tr>
+          <tr><td style="font-weight:700">Lunes</td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td></tr>
+          <tr><td style="font-weight:700">Martes</td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td></tr>
+          <tr><td style="font-weight:700">Miercoles</td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td></tr>
+          <tr><td style="font-weight:700">Jueves</td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td></tr>
+          <tr><td style="font-weight:700">Viernes</td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td></tr>
+          <tr><td style="font-weight:700">Sabado</td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td></tr>
+          <tr><td style="font-weight:700">Domingo</td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td><td><input style="width:60px;padding:4px;border:1px solid var(--slate3);border-radius:4px" placeholder="mg/dL"></td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="card-header"><div class="card-title">📊 Resumen semanal</div></div>
+      <div class="card-body">
+        <div class="fg fg3">
+          <div class="field"><label>Promedio glucemias ayunas</label><input id="avg-ayunas" readonly placeholder="—"></div>
+          <div class="field"><label>Promedio glucemias postprandiales</label><input id="avg-post" readonly placeholder="—"></div>
+          <div class="field"><label>Hipoglucemias (&lt;70)</label><input id="count-hipo" readonly placeholder="—"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: CONCEPTOS CLAVE -->
+  <div class="panel" id="panel-conceptos">
+    <div class="card">
+      <div class="card-header"><div class="card-title">📚 Conceptos clave en conteo de CHO</div></div>
+      <div class="card-body">
+        <div style="margin-bottom:16px">
+          <h3 style="font-size:14px;color:var(--navy);margin-bottom:8px">1. Que es un intercambio de carbohidratos?</h3>
+          <p style="font-size:12px;color:var(--muted);line-height:1.7">Un intercambio equivale a aproximadamente 15 gramos de carbohidratos. Los alimentos dentro del mismo grupo pueden intercambiarse manteniendo el mismo aporte de CHO. Esto permite variedad en la alimentacion sin alterar el control glicemico.</p>
+        </div>
+        <div class="section-divider"></div>
+        <div style="margin-bottom:16px">
+          <h3 style="font-size:14px;color:var(--navy);margin-bottom:8px">2. Indice Glucemico (IG)</h3>
+          <p style="font-size:12px;color:var(--muted);line-height:1.7">El IG clasifica los alimentos segun el efecto que tienen sobre la glucemia en las 2 horas posteriores a su consumo. Bajo IG (&lt;55): absorcion lenta. Medio (55-70): moderado. Alto (&gt;70): rapida absorcion. Preferir alimentos de bajo IG para mejor control glicemico.</p>
+        </div>
+        <div class="section-divider"></div>
+        <div style="margin-bottom:16px">
+          <h3 style="font-size:14px;color:var(--navy);margin-bottom:8px">3. Carga Glucemica (CG)</h3>
+          <p style="font-size:12px;color:var(--muted);line-height:1.7">CG = (CHO por porcion x IG) / 100. Baja (&lt;10): minimo impacto. Media (10-20): moderado. Alta (&gt;20): alto impacto. Una fruta puede tener IG alto pero CG baja si la porcion es pequena.</p>
+        </div>
+        <div class="section-divider"></div>
+        <div style="margin-bottom:16px">
+          <h3 style="font-size:14px;color:var(--navy);margin-bottom:8px">4. Regla 500 / 1800</h3>
+          <p style="font-size:12px;color:var(--muted);line-height:1.7">Usada en insulinoterapia intensificada. Ratio I:CHO = 500/TDD (analogos) o 450/TDD (regular). Factor de sensibilidad = 1800/TDD (mg/dL por UI de correccion). Permite calcular bolos prandiales y de correccion.</p>
+        </div>
+        <div class="section-divider"></div>
+        <div style="margin-bottom:16px">
+          <h3 style="font-size:14px;color:var(--navy);margin-bottom:8px">5. Metodo del Plato</h3>
+          <p style="font-size:12px;color:var(--muted);line-height:1.7">Plato de 9 pulgadas: 1/2 verduras no almidonadas, 1/4 proteinas magras, 1/4 carbohidratos (cereales/tuberculos). Metodo visual util para pacientes que no realizan conteo estricto de gramos.</p>
+        </div>
+        <div class="section-divider"></div>
+        <div>
+          <h3 style="font-size:14px;color:var(--navy);margin-bottom:8px">6. Fibra y carbohidratos netos</h3>
+          <p style="font-size:12px;color:var(--muted);line-height:1.7">La fibra no se digiere ni absorbe, por lo que no afecta la glucemia. Si la fibra es >=5g por porcion, puede restarse del total de CHO para obtener "carbohidratos netos". Util para alimentos ricos en fibra.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- /content -->
+</main>
+</div><!-- /app -->
+
+<script>
+// =====================
+// VARIABLES GLOBALES
+// =====================
+let pacientes = JSON.parse(localStorage.getItem('procel_pacientes') || '[]');
+let pacienteActual = null;
+let calculoActual = null;
+
+// =====================
+// NAVEGACION
+// =====================
+function goPanel(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const navId = 'nav-' + id.replace('panel-','');
+  const nav = document.getElementById(navId);
+  if(nav) nav.classList.add('active');
+
+  const titles = {
+    'panel-datos': ['👤 Datos del Paciente','Complete los datos para personalizar el plan'],
+    'panel-calculo': ['🔥 Cálculo Calórico','Harris-Benedict y Mifflin-St Jeor'],
+    'panel-insulina': ['💉 Insulinoterapia','Reglas 500/1800 y calculadora de bolo'],
+    'panel-distribucion': ['📊 Distribución CHO','Distribucion por comidas'],
+    'panel-listas': ['🍽️ Listas de Intercambio','Tablas de alimentos por grupo'],
+    'panel-tracker': ['✅ Registro Diario','Seguimiento de CHO consumidos'],
+    'panel-semaforo': ['🚦 Semáforo Alimentario','Clasificacion de alimentos'],
+    'panel-menu': ['📋 Menú Semanal','Plan de alimentacion tipo'],
+    'panel-dieta-semana': ['🥗 Dieta Semanal','Plan personalizado del paciente'],
+    'panel-compras': ['🛒 Lista de Compras','Generador de lista semanal'],
+    'panel-autocontrol': ['📓 Autocontrol','Registro semanal de glucemias'],
+    'panel-conceptos': ['📚 Conceptos Clave','Fundamentos del conteo de CHO']
+  };
+  if(titles[id]) {
+    document.getElementById('topbar-title').textContent = titles[id][0];
+    document.getElementById('topbar-sub').textContent = titles[id][1];
+  }
+}
+
+// =====================
+// PACIENTES
+// =====================
+function guardarPaciente() {
+  const p = leerFormularioPaciente();
+  if(!p.nombre) { alert('Ingrese al menos el nombre del paciente'); return; }
+  p.id = Date.now();
+  p.fecha = new Date().toISOString();
+  pacientes.push(p);
+  localStorage.setItem('procel_pacientes', JSON.stringify(pacientes));
+  renderPatientList();
+  alert('Paciente guardado correctamente');
+}
+
+function leerFormularioPaciente() {
+  return {
+    nombre: document.getElementById('pt-nombre').value,
+    fnac: document.getElementById('pt-fnac').value,
+    edad: parseFloat(document.getElementById('pt-edad').value) || 0,
+    sexo: document.getElementById('pt-sexo').value,
+    peso: parseFloat(document.getElementById('pt-peso').value) || 0,
+    talla: parseFloat(document.getElementById('pt-talla').value) || 0,
+    imc: parseFloat(document.getElementById('pt-imc').value) || 0,
+    af: parseFloat(document.getElementById('pt-af').value) || 1.2,
+    fe: parseFloat(document.getElementById('pt-fe').value) || 1.0,
+    objetivo: document.getElementById('pt-objetivo').value,
+    dx: document.getElementById('pt-dx').value,
+    comidas: parseInt(document.getElementById('pt-comidas').value) || 5,
+    pesoObj: parseFloat(document.getElementById('pt-peso-obj').value) || 0,
+    cintura: parseFloat(document.getElementById('pt-cintura').value) || 0,
+    tdd: parseFloat(document.getElementById('pt-tdd').value) || 0,
+    insulinType: document.getElementById('pt-insulin-type').value,
+    app: document.getElementById('pt-app').value,
+    meds: document.getElementById('pt-meds').value,
+    glucosa: parseFloat(document.getElementById('pt-glucosa').value) || 0,
+    hba1c: parseFloat(document.getElementById('pt-hba1c').value) || 0
+  };
+}
+
+function cargarPaciente(p) {
+  document.getElementById('pt-nombre').value = p.nombre || '';
+  document.getElementById('pt-fnac').value = p.fnac || '';
+  document.getElementById('pt-edad').value = p.edad || '';
+  document.getElementById('pt-sexo').value = p.sexo || 'F';
+  document.getElementById('pt-peso').value = p.peso || '';
+  document.getElementById('pt-talla').value = p.talla || '';
+  document.getElementById('pt-imc').value = p.imc || '';
+  document.getElementById('pt-af').value = p.af || 1.55;
+  document.getElementById('pt-fe').value = p.fe || 1.0;
+  document.getElementById('pt-objetivo').value = p.objetivo || 'mantenimiento';
+  document.getElementById('pt-dx').value = p.dx || 'base';
+  document.getElementById('pt-comidas').value = p.comidas || 5;
+  document.getElementById('pt-peso-obj').value = p.pesoObj || '';
+  document.getElementById('pt-cintura').value = p.cintura || '';
+  document.getElementById('pt-tdd').value = p.tdd || '';
+  document.getElementById('pt-insulin-type').value = p.insulinType || 'none';
+  document.getElementById('pt-app').value = p.app || '';
+  document.getElementById('pt-meds').value = p.meds || '';
+  document.getElementById('pt-glucosa').value = p.glucosa || '';
+  document.getElementById('pt-hba1c').value = p.hba1c || '';
+  pacienteActual = p;
+}
+
+function nuevoPaciente() {
+  document.querySelectorAll('#panel-datos input').forEach(i => { if(!i.readOnly) i.value = ''; });
+  document.getElementById('pt-sexo').value = 'F';
+  document.getElementById('pt-af').value = '1.55';
+  document.getElementById('pt-fe').value = '1.0';
+  document.getElementById('pt-objetivo').value = 'mantenimiento';
+  document.getElementById('pt-dx').value = 'base';
+  document.getElementById('pt-comidas').value = '5';
+  document.getElementById('pt-insulin-type').value = 'none';
+  pacienteActual = null;
+  calculoActual = null;
+}
+
+function renderPatientList() {
+  const container = document.getElementById('patient-list');
+  if(!container) return;
+  container.innerHTML = '';
+  pacientes.slice(-5).reverse().forEach(p => {
+    const chip = document.createElement('div');
+    chip.className = 'patient-chip' + (pacienteActual && pacienteActual.id === p.id ? ' active' : '');
+    chip.textContent = p.nombre;
+    chip.onclick = () => { cargarPaciente(p); renderPatientList(); };
+    container.appendChild(chip);
+  });
+}
+
+function exportarJSON() {
+  const p = leerFormularioPaciente();
+  if(!p.nombre) { alert('Ingrese datos del paciente primero'); return; }
+  const data = { paciente: p, calculo: calculoActual };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'procel_' + (p.nombre.replace(/\s+/g,'_')) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importarJSON(input) {
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if(data.paciente) cargarPaciente(data.paciente);
+      if(data.calculo) calculoActual = data.calculo;
+      alert('Datos importados correctamente');
+      renderPatientList();
+    } catch(err) { alert('Error al importar: ' + err.message); }
+  };
+  reader.readAsText(file);
+}
+
+// =====================
+// CALCULOS NUTRICIONALES
+// =====================
+function autoEdad() {
+  const fnac = document.getElementById('pt-fnac').value;
+  if(!fnac) return;
+  const hoy = new Date();
+  const nac = new Date(fnac);
+  let edad = hoy.getFullYear() - nac.getFullYear();
+  const m = hoy.getMonth() - nac.getMonth();
+  if(m < 0 || (m === 0 && hoy.getDate() < nac.getDate())) edad--;
+  document.getElementById('pt-edad').value = edad;
+}
+
+function calcularIMC() {
+  const peso = parseFloat(document.getElementById('pt-peso').value) || 0;
+  const talla = parseFloat(document.getElementById('pt-talla').value) || 0;
+  if(peso > 0 && talla > 0) {
+    const imc = peso / ((talla/100) ** 2);
+    document.getElementById('pt-imc').value = imc.toFixed(1);
+  }
+}
+
+function calcularTodo() {
+  calcularIMC();
+  const p = leerFormularioPaciente();
+  if(p.peso <= 0 || p.talla <= 0 || p.edad <= 0) {
+    alert('Complete peso, talla y edad');
+    return;
+  }
+
+  // Harris-Benedict
+  let gerHB;
+  if(p.sexo === 'F') {
+    gerHB = 655 + 9.56 * p.peso + 1.85 * p.talla - 4.68 * p.edad;
+  } else {
+    gerHB = 66 + 13.75 * p.peso + 5.0 * p.talla - 6.77 * p.edad;
+  }
+
+  // Mifflin-St Jeor
+  let gerMSJ;
+  if(p.sexo === 'F') {
+    gerMSJ = 10 * p.peso + 6.25 * p.talla - 5 * p.edad - 161;
+  } else {
+    gerMSJ = 10 * p.peso + 6.25 * p.talla - 5 * p.edad + 5;
+  }
+
+  const get = gerHB * p.af * p.fe;
+  let getFinal = get;
+  if(p.objetivo === 'perdida') getFinal -= 500;
+  if(p.objetivo === 'ganancia') getFinal += 300;
+
+  // Distribucion macronutrientes
+  let protPct = 0.20, fatPct = 0.30, choPct = 0.50;
+  if(p.dx === 'dm2' || p.dx === 'prediabetes') { protPct = 0.20; fatPct = 0.30; choPct = 0.45; }
+  if(p.dx === 'obesidad') { protPct = 0.25; fatPct = 0.30; choPct = 0.45; }
+  if(p.dx === 'erc') { protPct = 0.15; fatPct = 0.35; choPct = 0.50; }
+
+  const protG = (getFinal * protPct) / 4;
+  const fatG = (getFinal * fatPct) / 9;
+  const choG = (getFinal * choPct) / 4;
+  const porciones = Math.round(choG / 15);
+  const fibra = Math.max(25, choG * 0.14);
+
+  // IMC y categorias
+  const imc = p.peso / ((p.talla/100) ** 2);
+  let imcCat = '';
+  if(imc < 18.5) imcCat = 'Bajo peso';
+  else if(imc < 25) imcCat = 'Normal';
+  else if(imc < 30) imcCat = 'Sobrepeso';
+  else if(imc < 35) imcCat = 'Obesidad I';
+  else if(imc < 40) imcCat = 'Obesidad II';
+  else imcCat = 'Obesidad III';
+
+  // Peso ideal (Broca)
+  const pi = p.sexo === 'F' ? (p.talla - 100) * 0.85 : (p.talla - 100) * 0.90;
+  const paj = p.peso > pi ? pi + ((p.peso - pi) * 0.25) : p.peso;
+
+  calculoActual = { gerHB, gerMSJ, get: getFinal, protG, fatG, choG, porciones, fibra, imc, imcCat, pi, paj, protPct, fatPct, choPct };
+
+  // Mostrar resultados
+  document.getElementById('kpi-ger').textContent = Math.round(gerHB).toLocaleString();
+  document.getElementById('kpi-get').textContent = Math.round(getFinal).toLocaleString();
+  document.getElementById('kpi-prot').textContent = Math.round(protG);
+  document.getElementById('kpi-cho').textContent = Math.round(choG);
+  document.getElementById('kpi-fat').textContent = Math.round(fatG);
+  document.getElementById('kpi-prot-pct').textContent = Math.round(protPct*100) + '%';
+  document.getElementById('kpi-cho-pct').textContent = Math.round(choPct*100) + '%';
+  document.getElementById('kpi-fat-pct').textContent = Math.round(fatPct*100) + '%';
+
+  document.getElementById('res-ger').value = Math.round(gerHB).toLocaleString();
+  document.getElementById('res-ger-msj').value = Math.round(gerMSJ).toLocaleString();
+  document.getElementById('res-af').value = p.af;
+  document.getElementById('res-fe').value = p.fe;
+  document.getElementById('res-get').value = Math.round(getFinal).toLocaleString();
+  document.getElementById('res-cho').value = Math.round(choG);
+  document.getElementById('res-porciones').value = porciones;
+  document.getElementById('res-fibra').value = Math.round(fibra);
+  document.getElementById('res-prot').value = Math.round(protG);
+  document.getElementById('res-fat').value = Math.round(fatG);
+  document.getElementById('res-gkg').value = (protG / p.peso).toFixed(2);
+  document.getElementById('res-imc').value = imc.toFixed(1);
+  document.getElementById('res-imc-cat').value = imcCat;
+  document.getElementById('res-pi').value = pi.toFixed(1);
+  document.getElementById('res-paj').value = paj.toFixed(1);
+
+  // Alertas clinicas
+  const alerts = [];
+  if(imc >= 30) alerts.push('<div class="alert-box">⚠️ IMC ≥30: Obesidad. Considere derivacion a programa de manejo integral de peso.</div>');
+  if(p.cintura >= 88 && p.sexo === 'F') alerts.push('<div class="warn-box">⚠️ Circunferencia abdominal aumentada (>88cm en mujeres). Riesgo cardiometabolico elevado.</div>');
+  if(p.cintura >= 102 && p.sexo === 'M') alerts.push('<div class="warn-box">⚠️ Circunferencia abdominal aumentada (>102cm en hombres). Riesgo cardiometabolico elevado.</div>');
+  if(p.hba1c >= 7) alerts.push('<div class="alert-box">⚠️ HbA1c ≥7%: Control suboptimo. Revisar adherencia terapeutica y plan nutricional.</div>');
+  if(p.dx === 'dm2' && choG > 250) alerts.push('<div class="warn-box">⚠️ CHO >250g en DM2. Considerar redistribucion o ajuste de farmacos.</div>');
+  document.getElementById('alert-container').innerHTML = alerts.join('');
+
+  // Actualizar distribucion
+  actualizarDistribucion(choG, p.comidas);
+
+  // Actualizar tracker
+  initTracker(choG);
+
+  // Generar dieta personalizada
+  generarDietaPersonalizada(getFinal, choG, porciones, p.comidas);
+}
+
+function actualizarDistribucion(choTotal, nComidas) {
+  let dist;
+  if(nComidas == 3) {
+    dist = { desayuno: 0.30, colam: 0, almuerzo: 0.40, colpm: 0, cena: 0.30, col3: 0 };
+    document.getElementById('row-col3').style.display = 'none';
+    document.querySelector('#distribucion-container .meal-row:nth-child(2)').style.display = 'none';
+    document.querySelector('#distribucion-container .meal-row:nth-child(4)').style.display = 'none';
+  } else if(nComidas == 5) {
+    dist = { desayuno: 0.25, colam: 0.10, almuerzo: 0.30, colpm: 0.10, cena: 0.25, col3: 0 };
+    document.getElementById('row-col3').style.display = 'none';
+    document.querySelector('#distribucion-container .meal-row:nth-child(2)').style.display = 'grid';
+    document.querySelector('#distribucion-container .meal-row:nth-child(4)').style.display = 'grid';
+  } else {
+    dist = { desayuno: 0.22, colam: 0.08, almuerzo: 0.28, colpm: 0.08, cena: 0.22, col3: 0.12 };
+    document.getElementById('row-col3').style.display = 'grid';
+    document.querySelector('#distribucion-container .meal-row:nth-child(2)').style.display = 'grid';
+    document.querySelector('#distribucion-container .meal-row:nth-child(4)').style.display = 'grid';
+  }
+
+  const meals = ['desayuno','colam','almuerzo','colpm','cena','col3'];
+  meals.forEach(m => {
+    const val = choTotal * dist[m];
+    const porc = Math.round(val / 15);
+    const bar = document.getElementById('bar-' + m);
+    const pct = document.getElementById('pct-' + m);
+    const v = document.getElementById('val-' + m);
+    const p = document.getElementById('por-' + m);
+    if(bar) {
+      bar.style.width = (dist[m] * 100) + '%';
+      pct.textContent = Math.round(dist[m] * 100) + '%';
+      v.textContent = Math.round(val) + ' g';
+      p.textContent = porc + ' porc';
+    }
+  });
+
+  document.getElementById('dist-total-cho').textContent = Math.round(choTotal) + ' g';
+  document.getElementById('dist-total-porc').textContent = Math.round(choTotal/15) + ' porciones';
+}
+
+function checkAlerts() {
+  const dx = document.getElementById('pt-dx').value;
+  if(dx === 'dm2') {
+    document.getElementById('pt-insulin-type').value = 'none';
+  }
+}
+
+
+// =====================
+// INSULINOTERAPIA
+// =====================
+function calcularInsulina() {
+  const tdd = parseFloat(document.getElementById('ins-tdd').value) || 0;
+  const tipo = parseFloat(document.getElementById('ins-type').value) || 500;
+  const target = parseFloat(document.getElementById('ins-target').value) || 100;
+
+  if(tdd <= 0) { alert('Ingrese TDD valido'); return; }
+
+  const ratio = tipo / tdd;
+  const fs = 1800 / tdd;
+  const basal = tdd * 0.5;
+
+  document.getElementById('ins-ratio').textContent = '1:' + ratio.toFixed(1);
+  document.getElementById('ins-ratio-g').textContent = ratio.toFixed(1);
+  document.getElementById('ins-fs').textContent = fs.toFixed(1);
+  document.getElementById('ins-fs-val').textContent = fs.toFixed(1);
+  document.getElementById('ins-basal').textContent = basal.toFixed(1) + ' UI';
+  document.getElementById('ins-results').style.display = 'block';
+}
+
+function calcularBolo() {
+  const tdd = parseFloat(document.getElementById('ins-tdd').value) || parseFloat(document.getElementById('pt-tdd').value) || 0;
+  const tipo = parseFloat(document.getElementById('ins-type').value) || 500;
+  const cho = parseFloat(document.getElementById('bolo-cho').value) || 0;
+  const glu = parseFloat(document.getElementById('bolo-glu').value) || 0;
+  const target = parseFloat(document.getElementById('bolo-target').value) || 100;
+
+  if(tdd <= 0) { alert('Calcule primero los parametros de insulinoterapia'); return; }
+
+  const ratio = tipo / tdd;
+  const fs = 1800 / tdd;
+  const boloCHO = cho / ratio;
+  const boloCorr = glu > target ? (glu - target) / fs : 0;
+  const total = boloCHO + boloCorr;
+
+  document.getElementById('bolo-result').value = total.toFixed(1) + ' UI';
+
+  const expl = document.getElementById('bolo-explanation');
+  expl.style.display = 'block';
+  expl.innerHTML = '<strong>Desglose del calculo:</strong><br>' +
+    'Bolo por CHO: ' + cho + 'g / ' + ratio.toFixed(1) + ' = ' + boloCHO.toFixed(1) + ' UI<br>' +
+    (glu > target ? 'Correccion: (' + glu + ' - ' + target + ') / ' + fs.toFixed(1) + ' = ' + boloCorr.toFixed(1) + ' UI<br>' : 'Sin correccion (glucemia <= objetivo)<br>') +
+    '<strong>Total: ' + total.toFixed(1) + ' UI</strong>';
+}
+
+// =====================
+// TABS LISTAS
+// =====================
+function showTab(tabId) {
+  document.querySelectorAll('.tab-content').forEach(t => t.style.display = 'none');
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(tabId).style.display = 'block';
+  event.target.classList.add('active');
+}
+
+// =====================
+// TRACKER
+// =====================
+const trackerMealNames = ['Desayuno','Colacion AM','Almuerzo','Colacion PM','Cena'];
+let trackerData = {};
+
+function initTracker(objetivoCHO) {
+  const container = document.getElementById('tracker-meals');
+  if(!container) return;
+  container.innerHTML = '';
+  trackerData = {};
+
+  trackerMealNames.forEach((name, idx) => {
+    const mealId = 'meal-' + idx;
+    trackerData[mealId] = { items: [], total: 0 };
+
+    const div = document.createElement('div');
+    div.className = 'tracker-meal';
+    div.innerHTML = `
+      <div class="tracker-meal-head">
+        <span class="tracker-meal-title">${name}</span>
+        <span class="tracker-meal-meta" id="meta-${mealId}">0g CHO</span>
+      </div>
+      <div class="tracker-meal-body" id="body-${mealId}">
+        <div class="food-entry">
+          <input type="text" placeholder="Alimento" id="food-${mealId}-0">
+          <select id="group-${mealId}-0">
+            <option value="cereal">Cereal/pan</option>
+            <option value="fruta">Fruta</option>
+            <option value="lacteo">Lacteo</option>
+            <option value="verdura">Verdura</option>
+            <option value="legumbre">Legumbre</option>
+            <option value="grasa">Grasa</option>
+            <option value="proteina">Proteina</option>
+            <option value="otro">Otro</option>
+          </select>
+          <input type="number" placeholder="Porciones" id="porc-${mealId}-0" value="1" min="0" step="0.5">
+          <div class="cho-display" id="cho-${mealId}-0">0g</div>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="addFoodRow('${mealId}')" style="margin-top:8px">+ Agregar alimento</button>
+      </div>
+      <div class="tracker-total">
+        <span>Total ${name}</span>
+        <span id="total-${mealId}" style="font-size:16px">0g CHO</span>
+      </div>
+    `;
+    container.appendChild(div);
+
+    // Attach listeners
+    setTimeout(() => {
+      document.getElementById('porc-' + mealId + '-0').addEventListener('input', () => calcTrackerMeal(mealId));
+      document.getElementById('group-' + mealId + '-0').addEventListener('change', () => calcTrackerMeal(mealId));
+    }, 0);
+  });
+
+  document.getElementById('tracker-obj').textContent = 'Objetivo: ' + Math.round(objetivoCHO || 0) + ' g';
+}
+
+let foodRowCounters = {};
+
+function addFoodRow(mealId) {
+  if(!foodRowCounters[mealId]) foodRowCounters[mealId] = 1;
+  const idx = foodRowCounters[mealId]++;
+  const body = document.getElementById('body-' + mealId);
+  const entry = document.createElement('div');
+  entry.className = 'food-entry';
+  entry.innerHTML = `
+    <input type="text" placeholder="Alimento" id="food-${mealId}-${idx}">
+    <select id="group-${mealId}-${idx}">
+      <option value="cereal">Cereal/pan</option>
+      <option value="fruta">Fruta</option>
+      <option value="lacteo">Lacteo</option>
+      <option value="verdura">Verdura</option>
+      <option value="legumbre">Legumbre</option>
+      <option value="grasa">Grasa</option>
+      <option value="proteina">Proteina</option>
+      <option value="otro">Otro</option>
+    </select>
+    <input type="number" placeholder="Porciones" id="porc-${mealId}-${idx}" value="1" min="0" step="0.5">
+    <div class="cho-display" id="cho-${mealId}-${idx}">0g</div>
+  `;
+  body.insertBefore(entry, body.lastElementChild);
+
+  document.getElementById('porc-' + mealId + '-' + idx).addEventListener('input', () => calcTrackerMeal(mealId));
+  document.getElementById('group-' + mealId + '-' + idx).addEventListener('change', () => calcTrackerMeal(mealId));
+}
+
+const choPerPortion = {
+  cereal: 15, fruta: 15, lacteo: 12, verdura: 5,
+  legumbre: 20, grasa: 0, proteina: 0, otro: 15
+};
+
+function calcTrackerMeal(mealId) {
+  let total = 0;
+  const body = document.getElementById('body-' + mealId);
+  const entries = body.querySelectorAll('.food-entry');
+  entries.forEach((entry, i) => {
+    const groupSel = entry.querySelector('select');
+    const porcInp = entry.querySelector('input[type="number"]');
+    const choDisp = entry.querySelector('.cho-display');
+    if(groupSel && porcInp) {
+      const cho = (choPerPortion[groupSel.value] || 0) * parseFloat(porcInp.value || 0);
+      if(choDisp) choDisp.textContent = cho.toFixed(0) + 'g';
+      total += cho;
+    }
+  });
+
+  document.getElementById('total-' + mealId).textContent = total.toFixed(0) + 'g CHO';
+  document.getElementById('meta-' + mealId).textContent = total.toFixed(0) + 'g CHO';
+  trackerData[mealId] = { total };
+  updateTrackerTotal();
+}
+
+function updateTrackerTotal() {
+  let grandTotal = 0;
+  Object.values(trackerData).forEach(d => grandTotal += (d.total || 0));
+  document.getElementById('tracker-total-cho').textContent = grandTotal.toFixed(0) + ' g';
+
+  const objText = document.getElementById('tracker-obj').textContent;
+  const obj = parseFloat(objText.replace(/[^0-9.]/g,'')) || 200;
+  const pct = Math.min((grandTotal / obj) * 100, 100);
+  document.getElementById('tracker-progress').style.width = pct + '%';
+  document.getElementById('tracker-pct').textContent = pct.toFixed(0) + '%';
+
+  const bar = document.getElementById('tracker-progress');
+  bar.className = 'progress-fill';
+  if(pct > 110) bar.classList.add('bad');
+  else if(pct > 90) bar.classList.add('warn');
+}
+
+// =====================
+// LISTA DE COMPRAS
+// =====================
+function generarListaCompras() {
+  const personas = parseInt(document.getElementById('compras-personas').value) || 1;
+  const dias = parseInt(document.getElementById('compras-dias').value) || 7;
+  const factor = personas * (dias / 7);
+
+  const lista = {
+    'Cereales y panes': [
+      'Arroz integral - ' + (1 * factor).toFixed(1) + ' kg',
+      'Pan integral - ' + (0.5 * factor).toFixed(1) + ' kg',
+      'Avena en hojuelas - ' + (0.5 * factor).toFixed(1) + ' kg',
+      'Pasta integral - ' + (0.5 * factor).toFixed(1) + ' kg',
+      'Quinoa - ' + (0.25 * factor).toFixed(1) + ' kg'
+    ],
+    'Frutas y verduras': [
+      'Manzanas - ' + (7 * factor).toFixed(0) + ' unidades',
+      'Platanos - ' + (3 * factor).toFixed(0) + ' unidades',
+      'Naranjas - ' + (7 * factor).toFixed(0) + ' unidades',
+      'Tomates - ' + (1 * factor).toFixed(1) + ' kg',
+      'Cebolla - ' + (1 * factor).toFixed(1) + ' kg',
+      'Pimenton - ' + (0.5 * factor).toFixed(1) + ' kg',
+      'Zanahoria - ' + (0.5 * factor).toFixed(1) + ' kg',
+      'Brocoli - ' + (0.5 * factor).toFixed(1) + ' kg',
+      'Lechuga - ' + (2 * factor).toFixed(0) + ' unidades',
+      'Papa - ' + (1 * factor).toFixed(1) + ' kg',
+      'Aguacate - ' + (3 * factor).toFixed(0) + ' unidades'
+    ],
+    'Proteinas': [
+      'Pollo sin piel - ' + (1 * factor).toFixed(1) + ' kg',
+      'Pescado - ' + (0.5 * factor).toFixed(1) + ' kg',
+      'Carne magra - ' + (0.5 * factor).toFixed(1) + ' kg',
+      'Huevos - ' + (12 * factor).toFixed(0) + ' unidades',
+      'Atun en agua - ' + (2 * factor).toFixed(0) + ' latas'
+    ],
+    'Lacteos': [
+      'Leche descremada - ' + (3 * factor).toFixed(0) + ' litros',
+      'Yogurt natural - ' + (1 * factor).toFixed(1) + ' kg',
+      'Queso fresco - ' + (0.25 * factor).toFixed(1) + ' kg'
+    ],
+    'Legumbres': [
+      'Frijoles - ' + (0.5 * factor).toFixed(1) + ' kg',
+      'Lentejas - ' + (0.25 * factor).toFixed(1) + ' kg',
+      'Garbanzos - ' + (0.25 * factor).toFixed(1) + ' kg'
+    ],
+    'Grasas y otros': [
+      'Aceite de oliva - ' + (0.5 * factor).toFixed(1) + ' litro',
+      'Almendras - ' + (0.25 * factor).toFixed(1) + ' kg',
+      'Semillas de chia - ' + (0.1 * factor).toFixed(1) + ' kg'
+    ]
+  };
+
+  let html = '';
+  for(const [cat, items] of Object.entries(lista)) {
+    html += '<div style="margin-bottom:12px"><strong style="color:var(--navy);font-size:13px">' + cat + '</strong><ul style="margin:4px 0 0 20px;font-size:12px;color:var(--muted)">';
+    items.forEach(item => html += '<li>' + item + '</li>');
+    html += '</ul></div>';
+  }
+  document.getElementById('lista-compras-result').innerHTML = html;
+}
+
+// =====================
+// DIETA PERSONALIZADA
+// =====================
+function generarDietaPersonalizada(get, cho, porciones, nComidas) {
+  const container = document.getElementById('dieta-personalizada-container');
+  if(!container || !get) return;
+
+  let dist;
+  if(nComidas == 3) dist = { desayuno: 0.30, colam: 0, almuerzo: 0.40, colpm: 0, cena: 0.30 };
+  else if(nComidas == 5) dist = { desayuno: 0.25, colam: 0.10, almuerzo: 0.30, colpm: 0.10, cena: 0.25 };
+  else dist = { desayuno: 0.22, colam: 0.08, almuerzo: 0.28, colpm: 0.08, cena: 0.22 };
+
+  const choPerMeal = {
+    desayuno: Math.round(cho * dist.desayuno),
+    colam: Math.round(cho * dist.colam),
+    almuerzo: Math.round(cho * dist.almuerzo),
+    colpm: Math.round(cho * dist.colpm),
+    cena: Math.round(cho * dist.cena)
+  };
+
+  const opciones = {
+    desayuno: [
+      { name: 'Avena cocida + leche + fruta', cho: choPerMeal.desayuno },
+      { name: 'Pan integral + huevo + fruta', cho: choPerMeal.desayuno },
+      { name: 'Arepa + queso + fruta', cho: choPerMeal.desayuno },
+      { name: 'Quinoa cocida + yogurt + fruta', cho: choPerMeal.desayuno }
+    ],
+    colam: [
+      { name: 'Yogurt natural', cho: choPerMeal.colam },
+      { name: 'Fruta fresca', cho: choPerMeal.colam },
+      { name: 'Leche + almendras', cho: choPerMeal.colam }
+    ],
+    almuerzo: [
+      { name: 'Arroz integral + pollo + verduras + papa', cho: choPerMeal.almuerzo },
+      { name: 'Pasta integral + atun + ensalada', cho: choPerMeal.almuerzo },
+      { name: 'Lentejas + carne + verduras + arroz', cho: choPerMeal.almuerzo },
+      { name: 'Quinoa + pescado + verduras + camote', cho: choPerMeal.almuerzo }
+    ],
+    colpm: [
+      { name: 'Fruta fresca', cho: choPerMeal.colpm },
+      { name: 'Yogurt natural', cho: choPerMeal.colpm },
+      { name: 'Nueces + fruta', cho: choPerMeal.colpm }
+    ],
+    cena: [
+      { name: 'Sopa de verduras + pollo + pan integral', cho: choPerMeal.cena },
+      { name: 'Lentejas + verduras + queso + pan', cho: choPerMeal.cena },
+      { name: 'Pescado + verduras + arroz + fruta', cho: choPerMeal.cena },
+      { name: 'Huevo + verduras + pan + fruta', cho: choPerMeal.cena }
+    ]
+  };
+
+  let html = '<div class="info-box"><strong>Plan personalizado:</strong> ' + Math.round(get) + ' kcal/dia | ' + Math.round(cho) + 'g CHO | ' + porciones + ' porciones</div>';
+  html += '<div class="card"><div class="card-header"><div class="card-title">🥗 Menu semanal personalizado</div></div><div class="card-body" style="padding:0;overflow-x:auto"><table class="food-table">';
+  html += '<tr><th style="min-width:100px">Comida</th><th>Lunes</th><th>Martes</th><th>Miercoles</th><th>Jueves</th><th>Viernes</th><th>Sabado</th><th>Domingo</th></tr>';
+
+  const dias = ['Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo'];
+  const mealKeys = ['desayuno','colam','almuerzo','colpm','cena'];
+  const mealLabels = ['Desayuno','Colacion','Almuerzo','Colacion PM','Cena'];
+
+  mealKeys.forEach((key, mi) => {
+    if(choPerMeal[key] <= 0) return;
+    html += '<tr><td style="font-weight:700;color:var(--teal)">' + mealLabels[mi] + '<br><span style="font-size:10px;color:var(--muted)">~' + choPerMeal[key] + 'g CHO</span></td>';
+    dias.forEach((dia, di) => {
+      const opts = opciones[key];
+      const opt = opts[di % opts.length];
+      html += '<td class="dieta-day-col"><div class="dieta-meal-item">' + opt.name + ' <span class="cho-tag">' + opt.cho + 'g</span></div></td>';
+    });
+    html += '</tr>';
+  });
+
+  html += '</table></div></div>';
+  container.innerHTML = html;
+}
+
+// =====================
+// INICIALIZACION
+// =====================
+document.addEventListener('DOMContentLoaded', function() {
+  renderPatientList();
+
+  // Auto-calc IMC on input
+  ['pt-peso','pt-talla'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.addEventListener('input', calcularIMC);
+  });
+
+  // Init tracker with default
+  initTracker(200);
+});
+
+
+// =====================
+// EXPORTAR A WORD
+// =====================
+function exportarDietaWord() {
+  const nombre = document.getElementById('pt-nombre').value || 'Paciente';
+  const container = document.getElementById('dieta-personalizada-container');
+  if(!container || container.querySelector('.warn-box')) {
+    alert('Primero calcule los requerimientos y genere el plan dietetico');
+    return;
+  }
+
+  const get = document.getElementById('res-get').value || '';
+  const cho = document.getElementById('res-cho').value || '';
+  const porc = document.getElementById('res-porciones').value || '';
+  const prot = document.getElementById('res-prot').value || '';
+  const fat = document.getElementById('res-fat').value || '';
+  const imc = document.getElementById('res-imc').value || '';
+  const dx = document.getElementById('pt-dx');
+  const dxText = dx ? dx.options[dx.selectedIndex].text : '';
+
+  // Build MHTML content
+  const mhtml = buildMHTML('Plan Dietetico Semanal - ' + nombre, `
+    <h1 style="color:#0f3460;font-family:Arial,sans-serif;font-size:22px">PLAN DIETETICO SEMANAL</h1>
+    <p style="font-family:Arial,sans-serif;font-size:11px;color:#64748b">Generado por PROCEL Diabetes y Obesidad v2</p>
+    <hr style="border:none;border-top:2px solid #0d9488;margin:12px 0">
+
+    <h2 style="color:#0f3460;font-family:Arial,sans-serif;font-size:14px">DATOS DEL PACIENTE</h2>
+    <table style="width:100%;border-collapse:collapse;font-family:Arial,sans-serif;font-size:11px;margin-bottom:16px">
+      <tr><td style="border:1px solid #ccc;padding:6px;background:#f8fafc;width:30%"><strong>Nombre:</strong></td><td style="border:1px solid #ccc;padding:6px">${nombre}</td></tr>
+      <tr><td style="border:1px solid #ccc;padding:6px;background:#f8fafc"><strong>Diagnostico:</strong></td><td style="border:1px solid #ccc;padding:6px">${dxText}</td></tr>
+      <tr><td style="border:1px solid #ccc;padding:6px;background:#f8fafc"><strong>IMC:</strong></td><td style="border:1px solid #ccc;padding:6px">${imc} kg/m2</td></tr>
+    </table>
+
+    <h2 style="color:#0f3460;font-family:Arial,sans-serif;font-size:14px">REQUERIMIENTOS CALORICOS</h2>
+    <table style="width:100%;border-collapse:collapse;font-family:Arial,sans-serif;font-size:11px;margin-bottom:16px">
+      <tr style="background:#0d9488;color:white">
+        <th style="border:1px solid #ccc;padding:6px">GET</th>
+        <th style="border:1px solid #ccc;padding:6px">CHO</th>
+        <th style="border:1px solid #ccc;padding:6px">Proteinas</th>
+        <th style="border:1px solid #ccc;padding:6px">Grasas</th>
+        <th style="border:1px solid #ccc;padding:6px">Porciones CHO</th>
+      </tr>
+      <tr>
+        <td style="border:1px solid #ccc;padding:6px;text-align:center">${get} kcal</td>
+        <td style="border:1px solid #ccc;padding:6px;text-align:center">${cho} g</td>
+        <td style="border:1px solid #ccc;padding:6px;text-align:center">${prot} g</td>
+        <td style="border:1px solid #ccc;padding:6px;text-align:center">${fat} g</td>
+        <td style="border:1px solid #ccc;padding:6px;text-align:center">${porc} porc/dia</td>
+      </tr>
+    </table>
+
+    <h2 style="color:#0f3460;font-family:Arial,sans-serif;font-size:14px">MENU SEMANAL</h2>
+    ${container.innerHTML}
+
+    <div style="margin-top:20px;font-family:Arial,sans-serif;font-size:10px;color:#64748b">
+      <p><strong>Notas:</strong></p>
+      <p>1. Las porciones indicadas son aproximadas. Ajustar segun tolerancia y respuesta glicemica.</p>
+      <p>2. 1 porcion de CHO = 15 gramos de carbohidratos.</p>
+      <p>3. Preferir alimentos de bajo indice glucemico.</p>
+      <p>4. Incluir verduras no almidonadas libremente en todas las comidas.</p>
+      <p>5. Beber al menos 8 vasos de agua al dia.</p>
+      <p>6. Este plan fue generado por PROCEL Diabetes y Obesidad v2.</p>
+    </div>
+  `);
+
+  downloadMHTML(mhtml, 'Dieta_Semanal_' + nombre.replace(/\s+/g,'_') + '.doc');
+}
+
+function exportarComprasWord() {
+  const nombre = document.getElementById('pt-nombre').value || 'Paciente';
+  const result = document.getElementById('lista-compras-result');
+  if(!result || !result.innerHTML.trim()) {
+    alert('Primero genere la lista de compras');
+    return;
+  }
+
+  const personas = document.getElementById('compras-personas').value || '1';
+  const dias = document.getElementById('compras-dias').value || '7';
+
+  const mhtml = buildMHTML('Lista de Compras - ' + nombre, `
+    <h1 style="color:#0f3460;font-family:Arial,sans-serif;font-size:22px">LISTA DE COMPRAS SEMANAL</h1>
+    <p style="font-family:Arial,sans-serif;font-size:11px;color:#64748b">Generado por PROCEL Diabetes y Obesidad v2</p>
+    <hr style="border:none;border-top:2px solid #0d9488;margin:12px 0">
+
+    <table style="width:100%;border-collapse:collapse;font-family:Arial,sans-serif;font-size:11px;margin-bottom:16px">
+      <tr><td style="border:1px solid #ccc;padding:6px;background:#f8fafc;width:30%"><strong>Paciente:</strong></td><td style="border:1px solid #ccc;padding:6px">${nombre}</td></tr>
+      <tr><td style="border:1px solid #ccc;padding:6px;background:#f8fafc"><strong>Personas:</strong></td><td style="border:1px solid #ccc;padding:6px">${personas}</td></tr>
+      <tr><td style="border:1px solid #ccc;padding:6px;background:#f8fafc"><strong>Dias:</strong></td><td style="border:1px solid #ccc;padding:6px">${dias}</td></tr>
+    </table>
+
+    <h2 style="color:#0f3460;font-family:Arial,sans-serif;font-size:14px">ALIMENTOS POR CATEGORIA</h2>
+    ${result.innerHTML}
+
+    <div style="margin-top:20px;font-family:Arial,sans-serif;font-size:10px;color:#64748b">
+      <p><strong>Recomendaciones de compra:</strong></p>
+      <p>1. Preferir productos frescos y de temporada.</p>
+      <p>2. Leer etiquetas: evitar azucares anadidos y grasas trans.</p>
+      <p>3. Elegir cereales integrales (pan, arroz, pasta).</p>
+      <p>4. Incluir variedad de proteinas: pollo, pescado, huevos, legumbres.</p>
+      <p>5. Las cantidades son estimaciones. Ajustar segun preferencias.</p>
+    </div>
+  `);
+
+  downloadMHTML(mhtml, 'Lista_Compras_' + nombre.replace(/\s+/g,'_') + '.doc');
+}
+
+function buildMHTML(title, htmlContent) {
+  return `
+MIME-Version: 1.0
+Content-Type: multipart/related; boundary="----=_NextPart_"
+
+------=_NextPart_
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="utf-8">
+<title>${title}</title>
+<!--[if gte mso 9]>
+<xml>
+<w:WordDocument>
+<w:View>Print</w:View>
+<w:Zoom>100</w:Zoom>
+<w:DoNotOptimizeForBrowser/>
+</w:WordDocument>
+</xml>
+<![endif]-->
+<style>
+body { font-family: Arial, sans-serif; font-size: 11pt; line-height: 1.5; }
+table { border-collapse: collapse; width: 100%; }
+th, td { border: 1px solid #999; padding: 6px; }
+th { background-color: #0d9488; color: white; font-weight: bold; }
+.cho-tag { background: #ccfbf1; color: #0d9488; border-radius: 10px; padding: 1px 7px; font-size: 9px; font-weight: bold; }
+.dieta-meal-item { padding: 6px; border-bottom: 1px dashed #ccc; font-size: 11px; }
+</style>
+</head>
+<body>
+${htmlContent}
+</body>
+</html>
+
+------=_NextPart_---
+`;
+}
+
+function downloadMHTML(mhtmlContent, filename) {
+  const blob = new Blob([mhtmlContent], { type: 'application/msword' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
